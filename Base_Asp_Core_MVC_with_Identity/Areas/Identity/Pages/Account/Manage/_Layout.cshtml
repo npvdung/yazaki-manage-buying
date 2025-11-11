@@ -1,0 +1,62 @@
+﻿@{
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
+    {
+        Layout = parentLayout.ToString();
+    }
+    else
+    {
+        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    }
+}
+
+<div class="manage-account-container">
+    <div class="content-wrapper">
+        <div class="row">
+           @* <div class="col-md-3">
+                <partial name="_ManageNav" />
+            </div>*@
+            <div class="col-md-12">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+
+<style>
+    /* Đặt toàn bộ nội dung ra giữa màn hình */
+    .manage-account-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Chiều cao tối thiểu 100% chiều cao màn hình */
+        background-color: #f2f2f2; /* Màu nền chung */
+    }
+
+    /* Đặt khối nội dung vào giữa */
+    .content-wrapper {
+        width: 100%;
+        max-width: 960px; /* Đặt giới hạn chiều rộng cho khối nội dung */
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Bố cục cho các cột */
+    .row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .col-md-3 {
+        flex: 0 0 25%; /* Cột bên trái chiếm 25% chiều rộng */
+    }
+
+    .col-md-9 {
+        flex: 0 0 73%; /* Cột bên phải chiếm 73% chiều rộng */
+    }
+</style>

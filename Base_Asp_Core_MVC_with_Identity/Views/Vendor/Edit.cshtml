@@ -1,0 +1,214 @@
+﻿@model Vendor
+<style>
+    /* Tổng thể container */
+    .container-a {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        /*background-color: #f9f9f9;*/
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header form */
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .flex h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-buttons .btn {
+        font-size: 16px;
+        padding: 8px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .form-buttons .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .form-buttons .btn-cancel {
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-cancel:hover {
+        }
+
+    /* Form layout */
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+        .form-section h3 {
+            font-size: 20px;
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+    /* Row & Columns */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .col-md-6 {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    /* Form nhóm */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+            /* Hover và trạng thái */
+            .form-group input:hover {
+                background-color: #f5f5f5;
+            }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid #eaeaea;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .form-buttons .btn-cancel {
+        background-color: #e9ecef;
+        color: #6c757d;
+    }
+
+</style>
+<div class="container-a">
+    <!-- Tiêu đề và nút -->
+    <!-- Form -->
+    <form method="post">
+        <div class="flex">
+            <div class="div-right">
+                <h2>Sửa thông tin nhà cung cấp</h2>
+            </div>
+            <div class="form-buttons div-left">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Update</button>
+                <a asp-controller="Vendor" asp-action="Index" class="btn btn-cancel">Cancel</a>
+            </div>
+        </div>
+        <!-- Primary Information -->
+        <div class="form-section div-clear">
+            <div class="section-title">Chi tiết</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.VendorCode, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="VendorCode" readonly="true">
+                    <span asp-validation-for="VendorCode" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="VendorName">
+                    <span asp-validation-for="VendorName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Phone">
+                    <span asp-validation-for="Phone" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Description">
+                    <span asp-validation-for="Description" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Email">
+                    <span asp-validation-for="Email" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.TaxNumber, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="TaxNumber">
+                    <span asp-validation-for="TaxNumber" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="form-section">
+            <div class="section-title">Liên hệ</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.PaymentTerms, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="PaymentTerms">
+                    <span asp-validation-for="PaymentTerms" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.BankAccount, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="BankAccount">
+                    <span asp-validation-for="BankAccount" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.CurrencyId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.CurrencyId, new SelectList(ViewBag.Currencylst, "Text", "Value"),
+                    "Choose Currency",
+                    htmlAttributes: new {@id = "supplier", @class ="form-control col-md-4" })
+                    <span asp-validation-for="CurrencyId" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.Status,
+                    new SelectList(ViewBag.Statuslst, "Value", "Text", Model.Status), // Tham số thứ 4 là giá trị được chọn mặc định
+                    "Choose Status",
+                    new { @id = "supplier", @class = "form-control col-md-4" })
+                    <span asp-validation-for="Status" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

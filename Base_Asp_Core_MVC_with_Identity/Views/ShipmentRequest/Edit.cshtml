@@ -1,0 +1,341 @@
+﻿@using MangagerBuyProduct.Models.View;
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Base_Asp_Core_MVC_with_Identity.Models.ShipmentRequest
+
+@{
+    var poList     = ViewData["PurchaseOrders"] as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var statusList = ViewData["ShipStatus"]     as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+}
+<style>
+    /* Tổng thể container */
+    .container-a {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        /*background-color: #f9f9f9;*/
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header form */
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .flex h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-buttons .btn {
+        font-size: 16px;
+        padding: 8px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .form-buttons .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .form-buttons .btn-cancel {
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-cancel:hover {
+        }
+
+    /* Form layout */
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+        .form-section h3 {
+            font-size: 20px;
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+    /* Row & Columns */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .col-md-6 {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    /* Form nhóm */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+            /* Hover và trạng thái */
+            .form-group input:hover {
+                background-color: #f5f5f5;
+            }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .detail-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+        .detail-row .form-group {
+            flex: 1; /* Chia đều không gian giữa các trường */
+        }
+
+    .btn-remove-detail {
+        margin-top: 25px;
+        height: 40px;
+    }
+
+</style>
+<div class="container">
+    <div class="flex">
+        <div class="div-right">
+            <h2>Sửa đơn giao</h2>
+        </div>
+    </div>
+    <form method="post">
+        <!-- Master Information -->
+        <div class="form-section">
+            <div class="section-title">Thông tin đơn hàng</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.ShipmentRequestCode)
+                    <input type="text" class="form-control" asp-for="ShipmentRequestCode" readonly />
+                    <span asp-validation-for="ShipmentRequestCode"></span>
+                </div>
+                @*<div class="form-group col-md-6">
+                @Html.LabelFor(m => m.EmplouyeeId)
+                <input type="text" class="form-control" asp-for="EmplouyeeId" />
+                <span asp-validation-for="EmplouyeeId"></span>
+                </div>*@
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.PurchaseOrderId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.PurchaseOrderId,
+                    poList,
+                    "Choose PurchaseOrder",
+                    new { @class = "form-control col-md-8 dynamic-dropdown", data_type = "Manufacturer", data_target = "#manufacturerCode" })
+                <span asp-validation-for="PurchaseOrderId" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.Status,
+                    statusList,
+                    "Choose Status",
+                    new { @class = "form-control col-md-4" })
+                <span asp-validation-for="Status" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmount)
+                    <input type="number" class="form-control" id="TotalAmount" asp-for="TotalAmount" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalDiscoutAmount)
+                    <input type="number" class="form-control" id="TotalDiscoutAmount" asp-for="TotalDiscoutAmount" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmountIncludeTax)
+                    <input type="number" class="form-control" id="TotalAmountIncludeTax" asp-for="TotalAmountIncludeTax" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
+                    <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount" asp-for="TotalAmountIncludeTaxAndDiscount" step="0.01" />
+                </div>
+                <!-- Other fields for PurchaseContract -->
+            </div>
+        </div>
+
+        <!-- Detail Information -->
+        <div class="form-section">
+            <div class="section-title">Chi tiết đơn hàng</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.ShipmentRequestType, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="ShipmentRequestType" id="manufacturerCode" />
+                    <span asp-validation-for="ShipmentRequestType" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Method, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Method" id="manufacturerCode" />
+                    <span asp-validation-for="Method" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Address" id="manufacturerCode" />
+                    <span asp-validation-for="Address" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DelyveryPersonName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DelyveryPersonName" id="manufacturerCode" />
+                    <span asp-validation-for="DelyveryPersonName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DelyveryPersonPhone, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DelyveryPersonPhone" id="manufacturerCode" />
+                    <span asp-validation-for="DelyveryPersonPhone" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Note" id="manufacturerCode" />
+                    <span asp-validation-for="Note" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.RecipientsName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="RecipientsName" id="manufacturerCode" />
+                    <span asp-validation-for="RecipientsName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.RecipientsPhone, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="RecipientsPhone" id="manufacturerCode" />
+                    <span asp-validation-for="RecipientsPhone" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DateShip, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="date" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DateShip" id="manufacturerCode" />
+                    <span asp-validation-for="DateShip" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DiscountAmout, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="int" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DiscountAmout" id="manufacturerCode" />
+                    <span asp-validation-for="DiscountAmout" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="int" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Amount" id="manufacturerCode" />
+                    <span asp-validation-for="Amount" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="purchaseContractId" asp-for="ID" />
+        <!-- Buttons -->
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a href="javascript:void(0);" class="btn btn-cancel" id="shipButton">Đã nhận</a>
+            <a href="@Url.Action("Index")" class="btn btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#shipButton").on("click", function () {
+            // Lấy giá trị Id từ trường ẩn
+            var id = $("#purchaseContractId").val();
+
+            if (!id) {
+                alert("Id không hợp lệ!");
+                return;
+            }
+            var url = '/ItemReceipt/ItemReceipt?id=' + id;
+            window.location.href = url;
+            // Gửi yêu cầu đến API
+            //$.ajax({
+            //    url: '/PurchaseOrder/Shipment?id=' + id, // Thay URL này thành đúng API của bạn
+            //    type: 'GET',
+            //    data: { Id: id }, // Gửi Id dưới dạng payload
+            //    success: function (result) {
+            //        // Điều hướng đến controller khác với Id
+            //        //if (result && result.redirectUrl) {
+            //        //    window.location.href = result.redirectUrl;
+            //        //} else {
+            //        //    alert("Xử lý thành công nhưng không tìm thấy URL chuyển hướng.");
+            //        //}
+            //    },
+            //    error: function (xhr, status, error) {
+            //        console.error("Có lỗi xảy ra:", xhr.responseText);
+            //    }
+            //});
+        });
+    });
+    // Gắn sự kiện khi thêm detail
+    $('.dynamic-dropdown').change(function () {
+        const vendorId = $(this).val(); // Lấy ID Vendor
+        const targetDropdown = $('#product-template'); // Dropdown sản phẩm ẩn
+
+        if (vendorId) {
+            $.ajax({
+                url: '@Url.Action("GetDataForDropdown", "ShipmentRequest")',
+                type: 'GET',
+                data: { id: vendorId, type: 'Manufacturer' },
+                success: function (response) {
+                    // Cập nhật nội dung template
+                    targetDropdown.empty();
+                    $.each(response, function (index, item) {
+                        debugger;
+                        $('#TotalAmount').val(response.totalAmount);
+                        $('#TotalDiscoutAmount').val(response.totalDiscoutAmount);
+                        $('#TotalAmountIncludeTax').val(response.totalAmountIncludeTax);
+                        $('#TotalAmountIncludeTaxAndDiscount').val(response.totalAmountIncludeTaxAndDiscount);
+                    });
+                    // Reset tất cả các dropdown sản phẩm trong chi tiết
+                },
+                error: function () {
+                    alert('Error fetching products!');
+                }
+            });
+        } else {
+            targetDropdown.empty();
+            // Reset tất cả các dropdown sản phẩm trong chi tiết
+            resetProductDropdowns();
+        }
+    });
+
+</script>
+
+

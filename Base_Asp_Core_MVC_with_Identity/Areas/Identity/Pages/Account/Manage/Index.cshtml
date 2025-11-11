@@ -1,0 +1,205 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+@*<h3 class="page-title">@ViewData["Title"]</h3>*@
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row profile-container">
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <div class="profile-content">
+            <!-- Profile picture section (left side) -->
+            <div class="profile-picture-section">
+                <div class="form-group">
+                    <label asp-for="Input.ProfilePicture"></label>
+                    @if (Model.Input.ProfilePicture != null)
+                    {
+                        <img id="profilePicture" class="rounded-profile-picture" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.ProfilePicture))">
+                    }
+                    else
+                    {
+                        <img id="profilePicture" class="rounded-profile-picture" src="">
+                    }
+                    <input type="file"
+                           accept=",.jpg,.jpeg,.gif,.tif"
+                           asp-for="Input.ProfilePicture"
+                           class="form-control custom-file-input"
+                           onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0])" />
+                    <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Profile form fields (right side) -->
+            <div class="profile-details-section">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Input.FirstName"></label>
+                            <input asp-for="Input.FirstName" class="form-control" />
+                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.LastName"></label>
+                            <input asp-for="Input.LastName" class="form-control" />
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Username"></label>
+                            <input asp-for="Input.Username" class="form-control" />
+                            <span asp-validation-for="Input.Username" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.PhoneNumber"></label>
+                            <input asp-for="Input.PhoneNumber" class="form-control" />
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="update-profile-button" type="submit" class="btn btn-primary custom-btn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+/* General styles */
+/* General styles */
+/* General styles */
+body {
+    background-color: #e6f7ff; /* Light blue background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #333;
+    height: 100vh; /* Full height for the body */
+}
+
+/* Page title */
+.page-title {
+    text-align: center;
+    font-size: 28px; /* Slightly larger title */
+    color: #007bff; /* Light blue for title */
+    margin-bottom: 20px;
+}
+
+/* Profile container */
+.profile-container {
+    max-width: 900px; /* Maximum width of the container */
+    margin: 0 auto; /* Center the container */
+    background-color: #ffffff; /* White background */
+    padding: 30px;
+    border-radius: 15px; /* More rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Slightly darker shadow */
+    height: calc(100% - 60px); /* Full height minus margins */
+}
+
+/* Profile content layout */
+.profile-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px; /* Spacing between sections */
+    height: 100%; /* Full height */
+}
+
+/* Profile details section */
+.profile-details-section {
+    flex: 2; /* Take up more space */
+}
+
+/* Form group styling */
+.form-group {
+    margin-bottom: 25px; /* More spacing */
+}
+
+/* Label styling */
+label {
+    font-weight: 600;
+    font-size: 16px; /* Larger label font size */
+    color: #007bff; /* Light blue for labels */
+    display: inline-block;
+    margin-bottom: 8px; /* More space below labels */
+}
+
+/* Input fields */
+.form-control {
+    display: block;
+    width: 100%; /* Full width */
+    padding: 12px; /* Increased padding */
+    font-size: 16px; /* Larger input font size */
+    border-radius: 8px; /* More rounded edges */
+    border: 1px solid #007bff; /* Light blue border */
+    background-color: #f9f9f9; /* Light background for inputs */
+    transition: all 0.3s ease; /* Smooth transition */
+}
+
+.form-control:focus {
+    border-color: #0056b3; /* Darker blue on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3); /* Subtle blue shadow */
+}
+
+/* Button styling */
+.custom-btn {
+    display: block;
+    width: 100%; /* Full width */
+    padding: 15px; /* Increased padding */
+    background-color: #007bff; /* Light blue background */
+    border: none; /* No border */
+    color: white; /* White text */
+    border-radius: 8px; /* More rounded button */
+    font-size: 18px; /* Larger button font */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+.custom-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-2px); /* Lift effect */
+}
+
+/* Profile picture section */
+.profile-picture-section {
+    flex: 1; /* Take up less space */
+    text-align: center; /* Center content */
+    margin-top: 20px; /* Space above */
+}
+
+.rounded-profile-picture {
+    width: 100%; /* Full width */
+    max-width: 220px; /* Maximum width */
+    height: auto; /* Automatic height */
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover; /* Cover object */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 15px; /* Space below image */
+}
+
+/* File input styling */
+.custom-file-input {
+    margin-top: 10px; /* Space above */
+    padding: 10px; /* Padding */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded edges */
+}
+
+/* Active class styles for navbar */
+.navbar-item.active {
+    background-color: #007bff; /* Light blue for active item */
+    color: white; /* White text for active item */
+    font-weight: bold; /* Bold font for active item */
+}
+
+
+</style>

@@ -1,0 +1,186 @@
+﻿@using MangagerBuyProduct.Models.View;
+@model PurchaseOrderView
+
+@{
+    // Hứng ViewBag để tránh RuntimeBinderException
+    var contractList = ViewBag.purchaseContractLst as IEnumerable<SelectListItem> 
+                       ?? Enumerable.Empty<SelectListItem>();
+    var statusList = ViewBag.Statuslst as IEnumerable<SelectListItem> 
+                     ?? Enumerable.Empty<SelectListItem>();
+    var productList = ViewBag.productlst as IEnumerable<SelectListItem> 
+                      ?? Enumerable.Empty<SelectListItem>();
+    // Hứng details để tránh Model.PurchaseOrderDetails == null
+    var details = Model.PurchaseOrderDetails ?? new List<Base_Asp_Core_MVC_with_Identity.Models.PurchaseOrderDetails>();
+}
+
+<style>
+    /* nguyên css của bạn giữ nguyên */
+    .container-a {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .flex h2 { font-size: 24px; font-weight: bold; color: #333; }
+    .form-buttons .btn { font-size: 16px; padding: 8px 20px; border-radius: 5px; margin-left: 10px; transition: all 0.3s ease; }
+    .form-buttons .btn-primary { background-color: #007bff; border: none; color: white; }
+    .form-buttons .btn-primary:hover { background-color: #0056b3; }
+    .form-section { margin-bottom: 30px; }
+    .section-title { font-size: 1.25rem; font-weight: bold; color: #007bff; border-bottom: 2px solid #007bff; border-radius: 15px; margin-bottom: 10px; }
+    .row { display: flex; flex-wrap: wrap; gap: 20px; }
+    .col-md-6 { flex: 1 1 calc(50% - 10px); }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 14px; font-weight: 500; color: #333; margin-bottom: 5px; }
+    .form-group input { padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; color: #333; transition: all 0.3s ease; }
+    .form-group input:focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); }
+    .detail-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .detail-row .form-group { flex: 1; }
+    .btn-remove-detail { margin-top: 25px; height: 40px; }
+</style>
+
+<div class="container">
+    <form method="post">
+        <div class="flex">
+            <div class="div-right">
+                <h2>Information PurchaseOrder</h2>
+            </div>
+        </div>
+
+        <!-- Master Information -->
+        <div class="form-section">
+            <div class="section-title">Order Master</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.PurchaseOrderCode)
+                    <input type="text" class="form-control" asp-for="PurchaseOrderCode" readonly />
+                    <span asp-validation-for="PurchaseOrderCode"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.EmployeeId)
+                    <input type="text" class="form-control" asp-for="EmployeeId" />
+                    <span asp-validation-for="EmployeeId"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.Description)
+                    <input type="text" class="form-control" asp-for="Description" readonly />
+                </div>
+
+                <!-- dropdown PurchaseContractId: dùng list đã hứng -->
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.PurchaseContractId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(
+                        model => model.PurchaseContractId,
+                        contractList,
+                        "Choose PurchaseContract",
+                        new {
+                            @class = "form-control col-md-8 dynamic-dropdown",
+                            data_type = "Manufacturer",
+                            data_target = "#manufacturerCode"
+                        }
+                    )
+                    <span asp-validation-for="PurchaseContractId" class="alert-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(
+                        model => model.Status,
+                        statusList,
+                        "Choose Status",
+                        new { @id = "supplier", @class = "form-control col-md-4" }
+                    )
+                    <span asp-validation-for="Status" class="alert-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmount)
+                    <input type="number" class="form-control" id="TotalAmount" asp-for="TotalAmount" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalDiscoutAmount)
+                    <input type="number" class="form-control" id="TotalDiscoutAmount" asp-for="TotalDiscoutAmount" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmountIncludeTax)
+                    <input type="number" class="form-control" id="TotalAmountIncludeTax" asp-for="TotalAmountIncludeTax" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
+                    <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount" asp-for="TotalAmountIncludeTaxAndDiscount" step="0.01" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Information -->
+        <div class="form-section">
+            <div class="section-title">Order Details</div>
+            <div id="details-container">
+                @for (int i = 0; i < details.Count; i++)
+                {
+                    <div class="detail-row">
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(m => details[i].ProductId)
+                            @Html.DropDownListFor(
+                                m => m.PurchaseOrderDetails[i].ProductId,
+                                productList,
+                                "Choose Product",
+                                new { @class = "form-control" }
+                            )
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(m => details[i].Quantity)
+                            @Html.EditorFor(m => m.PurchaseOrderDetails[i].Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(m => details[i].Price)
+                            @Html.EditorFor(m => m.PurchaseOrderDetails[i].Price, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            @Html.LabelFor(m => details[i].TotalAmount)
+                            @Html.EditorFor(m => m.PurchaseOrderDetails[i].TotalAmount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Hidden field để lấy giá trị Id (purchase order Id) -->
+        <input type="hidden" id="purchaseContractId" asp-for="ID" />
+
+        <!-- Buttons -->
+        <div class="form-buttons">
+            <a href="javascript:void(0);" class="btn btn-cancel" id="shipButton">Ship</a>
+            <a href="@Url.Action("Index")" class="btn btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    // phần js của bạn giữ nguyên
+    $(document).ready(function () {
+        $("#shipButton").on("click", function () {
+            var id = $("#purchaseContractId").val();
+            if (!id) {
+                alert("Id không hợp lệ!");
+                return;
+            }
+            var url = '/PurchaseOrder/Shipment?id=' + id;
+            window.location.href = url;
+        });
+
+        $('#TotalDiscoutAmount, #TotalAmountIncludeTax').on('input', function () {
+            const totalAmount = parseFloat($('#TotalAmount').val()) || 0;
+            const discount = parseFloat($('#TotalDiscoutAmount').val()) || 0;
+            const tax = parseFloat($('#TotalAmountIncludeTax').val()) || 0;
+            const totalAmountIncludeTaxAndDiscount = totalAmount - discount - tax;
+            $('#TotalAmountIncludeTaxAndDiscount').val(totalAmountIncludeTaxAndDiscount.toFixed(2));
+        });
+    });
+</script>

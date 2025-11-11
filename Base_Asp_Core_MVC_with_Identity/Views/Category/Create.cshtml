@@ -1,0 +1,171 @@
+﻿@model Category
+<style>
+    /* Toàn bộ form */
+    body {
+        background-color: #f8f9fa; /* Màu nền dịu nhẹ */
+        font-family: 'Roboto', Arial, sans-serif; /* Font chữ hiện đại */
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-form {
+        max-width: 800px; /* Giới hạn chiều rộng form */
+        margin: 30px auto 0 auto; /* Căn giữa form */
+        /*background-color: #ffffff;*/
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Bóng mờ nhẹ */
+    }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #eaeaea;
+        padding-bottom: 10px;
+    }
+
+        .form-header h2 {
+            margin: 0;
+            font-size: 26px;
+            color: #333333;
+        }
+
+    .form-buttons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-cancel {
+        background-color: #e9ecef;
+        color: #6c757d;
+    }
+
+        .btn-cancel:hover {
+            background-color: #ced4da;
+        }
+
+    .form-section {
+        margin-bottom: 25px;
+    }
+
+        .form-section h3 {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333333;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 14px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+    .form-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid #eaeaea;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+</style>
+
+<div class="container-form">
+    <form method="post">
+        <div class="form-header">
+            <h2>TThêm loại vật tư</h2>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
+                <a asp-controller="Category" asp-action="Index" class="btn btn-cancel">Cancel</a>
+            </div>
+        </div>
+        <!-- Primary Information -->
+        <div class="form-section">
+            <div class="section-title">Thông tin</div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryCode, htmlAttributes: new { @class = "control-label" })
+                <input type="text" class="form-control" asp-for="CategoryCode" readonly="true">
+                <span asp-validation-for="CategoryCode" class="alert-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="CategoryName" placeholder="Nhập tên danh mục">
+                <span asp-validation-for="CategoryName" class="alert-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="Description" placeholder="Nhập mô tả">
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        @*<div class="form-section">
+        <h3>Additional Information</h3>
+        <div class="form-group">
+        <label for="Description">Description</label>
+        <input type="text" class="form-control" id="Description" name="Description" placeholder="Enter description">
+        </div>
+        </div>*@
+
+        <!-- Submit and Cancel Buttons -->
+        @*<div class="form-buttons">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save</button>
+        <a href="#" class="btn btn-cancel">Cancel</a>
+        </div>*@
+    </form>
+</div>
+
+
+
+@section Scripts {
+    @Html.Partial("_ValidationScriptsPartial")
+}

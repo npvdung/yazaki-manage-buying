@@ -1,0 +1,76 @@
+﻿@model Supplier
+<style>
+    body {
+        background-color: #f7f7f7;
+        font-family: Arial, sans-serif;
+    }
+
+    .container-a {
+        margin-top: 50px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #007bff;
+    }
+
+</style>
+
+<div class="container-a">
+    <div class="row pb-2">
+        <h2>Thêm mới nhà cung cấp</h2>
+    </div>
+
+    <form method="post">
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.SupplierCode, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="SupplierCode" readonly="true">
+                <span asp-validation-for="SupplierCode" class="alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.SupplierName, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="SupplierName" placeholder="Nhập tên ">
+                <span asp-validation-for="SupplierName" class="alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="PhoneNumber" placeholder="Nhập số điện thoại">
+                <span asp-validation-for="PhoneNumber" class="alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="Address" placeholder="Nhập địa chỉ">
+                <span asp-validation-for="Address" class="alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="Email" placeholder="Nhập Email">
+                <span asp-validation-for="Email" class="alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="Description" placeholder="Nhập mô tả">
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-lg btn-outline-primary px-4 py-2 mx-2"><i class="bi bi-save"></i> Tạo mới </button>
+            <a asp-controller="Supplier" asp-action="Index" class="btn btn-lg btn-outline-warning px-4 py-2">Trở về</a>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

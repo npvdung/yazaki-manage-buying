@@ -1,0 +1,159 @@
+﻿@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Manage Email";
+    ViewData["ActivePage"] = "Email";
+}
+
+@*<h3 class="page-title">@ViewData["Title"]</h3>*@
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row email-container">
+    <form id="email-form" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                @if (Model.IsEmailConfirmed)
+                {
+                    <div class="form-group input-group">
+                        <input asp-for="Email" class="form-control" disabled />
+                        <div class="input-group-append">
+                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
+                        </div>
+                        @*<label asp-for="Email" class="form-label"></label>*@
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group form-floating">
+                        <input asp-for="Email" class="form-control" disabled />
+                        @*<label asp-for="Email" class="form-label">Email</label>*@
+                        <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link custom-link">Send verification email</button>
+                    </div>
+                }
+
+                <div class="form-group form-floating">
+                    <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" />
+                    <label asp-for="Input.NewEmail" class="form-label">New Email</label>
+                    <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+                </div>
+
+                <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-primary custom-btn">Change email</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    /* General styles */
+    body {
+        background-color: #f2f2f2;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .page-title {
+        text-align: center;
+        font-size: 24px;
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+    /* Email container */
+    .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        transition: all 0.3s ease;
+    }
+
+    .form-floating .form-label {
+        position: absolute;
+        top: -18px;
+        left: 10px;
+        background: white;
+        padding: 0 5px;
+        font-size: 12px;
+        color: #4CAF50;
+    }
+
+    .form-control:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+    }
+
+    /* Button styling */
+    .custom-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-btn:hover {
+        background-color: #43a047;
+    }
+
+    /* Custom link styling */
+    .custom-link {
+        color: #4CAF50;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .custom-link:hover {
+        color: #43a047;
+    }
+
+    /* Input group styles */
+    .input-group-text {
+        background-color: #e9f7ef;
+        border: 1px solid #ddd;
+        color: #4CAF50;
+        font-weight: bold;
+    }
+
+    .input-group-append {
+        display: flex;
+        align-items: center;
+    }
+</style>

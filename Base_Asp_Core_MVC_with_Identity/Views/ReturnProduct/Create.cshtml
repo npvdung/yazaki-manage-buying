@@ -1,0 +1,201 @@
+﻿@using Base_Asp_Core_MVC_with_Identity.Models.View;
+@model ReturnViewModel
+
+<style>
+    body {
+        background-color: #f7f7f7;
+        font-family: Arial, sans-serif;
+    }
+
+    .container-a {
+        margin-top: 50px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #007bff;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+    .detail-container {
+        margin-top: 20px;
+    }
+
+    .detail-row {
+        margin-bottom: 10px;
+    }
+
+    .add-detail-button {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container-a">
+    <div class="row pb-2">
+        <h2>Trả hàng</h2>
+    </div>
+
+    <form method="post" asp-action="Create" asp-controller="ImportProduct">
+        <div class="row">
+            @*<div class="form-group col-md-6">
+            @Html.LabelFor(model => model.ReturnDate, htmlAttributes: new { @class = "control-label col-md-4" })
+            <input type="text" class="form-control mb-3 col-md-8" asp-for="ImportCode" readonly="true">
+            <span asp-validation-for="ImportCode" class="alert-danger"></span>
+            </div>*@
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.ExportId, htmlAttributes: new { @class = "control-label col-md-4" })
+                @Html.DropDownListFor(model => model.ExportId, new SelectList(ViewBag.import_lst, "Text", "Value"),
+                "Chọn Phiếu nhập",
+                htmlAttributes: new { @id = "supplier", @class = "form-control col-md-4" })
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.ReturnDate, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="date" class="form-control datepicker col-md-8" asp-for="ReturnDate" id="birthDateInput" asp-format="{0:yyyy-MM-dd}">
+                <span asp-validation-for="ReturnDate" class="alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(model => model.TotalAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                <input type="text" class="form-control mb-3 col-md-8" asp-for="TotalAmount" placeholder="Tổng tiền">
+                <span asp-validation-for="TotalAmount" class="alert-danger"></span>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-lg btn-outline-primary px-4 py-2 mx-2"><i class="bi bi-save"></i> Tạo mới </button>
+            <a asp-controller="ImportProduct" asp-action="Index" class="btn btn-lg btn-outline-warning px-4 py-2">Trở về</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    @{
+        <script>
+            $(document).ready(function () {
+                // Tính tổng tiền khi giá hoặc số lượng thay đổi
+                $('input[id^="quantity"], input[id^="price"]').on('change', function () {
+                    var totalAmount = 0;
+
+                    // Kiểm tra xem các input có tồn tại và có giá trị không
+                    var quantityInputs = $('input[id^="quantity"]');
+                    var priceInputs = $('input[id^="price"]');
+
+                    if (quantityInputs.length === priceInputs.length && quantityInputs.length > 0) {
+                        quantityInputs.each(function (index) {
+                            var quantity = parseFloat($(this).val());
+                            var price = parseFloat($('#price' + index).val());
+                            if (!isNaN(quantity) && !isNaN(price)) {
+                                totalAmount += quantity * price;
+                            }
+                        });
+
+                        // Định dạng tổng tiền thành tiền VNĐ và gán vào ô input
+                        $('#totalAmount').val(formatCurrency(totalAmount.toFixed(2)));
+                    }
+                });
+
+                // Hàm định dạng tiền VNĐ
+                function formatCurrency(value) {
+                    // Chuyển đổi giá trị thành chuỗi
+                    var stringValue = value.toString();
+                    // Kiểm tra xem có dấu chấm thập phân hay không
+                    var hasDecimal = stringValue.indexOf('.') !== -1;
+                    // Phần nguyên và phần thập phân
+                    var integerPart, decimalPart = '';
+
+                    if (hasDecimal) {
+                        var parts = stringValue.split('.');
+                        integerPart = parts[0];
+                        decimalPart = parts[1];
+                    } else {
+                        integerPart = stringValue;
+                    }
+
+                    // Định dạng phần nguyên
+                    var formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+                    // Trả về giá trị đã định dạng
+                    if (hasDecimal) {
+                        return formattedInteger + ',' + decimalPart;
+                    } else {
+                        return formattedInteger;
+                    }
+                }
+            });
+
+
+            function preventNegativeInput(input) {
+                // Kiểm tra giá trị nhập vào
+                var value = input.value;
+
+                // Nếu giá trị nhập vào là rỗng, gán giá trị mặc định là 0
+                if (value === "") {
+                    input.value = "0";
+                    return;
+                }
+
+                // Loại bỏ dấu âm nếu có
+                if (value.includes("-")) {
+                    input.value = value.replace("-", "");
+                }
+            }
+
+            function formatCurrencyv1(input) {
+                // Lấy giá trị nhập vào
+                var value = input.value;
+                // Kiểm tra nếu giá trị nhập vào là rỗng hoặc là dấu -
+                if (value === "" || value === "-") {
+                    // Nếu là rỗng hoặc là dấu -, gán giá trị mặc định là 0
+                    input.value = "0";
+                    return;
+                }
+                // Xóa các ký tự không phải là số từ giá trị nhập vào
+                value = value.replace(/[^\d]/g, '');
+
+
+                // Loại bỏ số 0 ở đầu
+                value = value.replace(/^0+/, '');
+
+                // Kiểm tra nếu giá trị sau khi loại bỏ số 0 ở đầu là rỗng, gán giá trị mặc định là 0
+                if (value === "") {
+                    input.value = "0";
+                    return;
+                }
+
+                // Tạo biến để lưu trữ kết quả
+                var result = "";
+
+                // Dùng vòng lặp để thêm dấu chấm sau mỗi 3 chữ số
+                for (var i = 0; i < value.length; i++) {
+                    result += value.charAt(i);
+                    if ((value.length - i - 1) % 3 === 0 && i !== value.length - 1) {
+                        result += ".";
+                    }
+                }
+
+                //// Gán giá trị đã được định dạng lại vào ô input
+                input.value = value;
+            }
+        </script>
+
+        <partial name="_ValidationScriptsPartial" />
+
+    }
+}
+
+

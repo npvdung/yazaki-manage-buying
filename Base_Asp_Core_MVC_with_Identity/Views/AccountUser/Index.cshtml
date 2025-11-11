@@ -1,0 +1,62 @@
+﻿@using Base_Asp_Core_MVC_with_Identity.Areas.Identity.Data
+@model IEnumerable<Base_Asp_Core_MVC_with_Identity.Areas.Identity.Data.UserSystemIdentity>
+@{
+    ViewData["Title"] = "";
+}
+<link href="~/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="node_modules/antd/dist/antd.css">
+<link href="~/css/datatable.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<style></style>
+@if (TempData["ResultOk"] != null)
+{
+    <div id="alert-div" class="alert alert-success position-fixed top-0 end-0 border border-success rounded-pill py-2 px-3" style="max-width: 450px;">
+        <span class="fw-bold" style="font-size: 16px;">@TempData["ResultOk"]</span>
+        <button type="button" class="btn-close float-start" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+        // Get the alert element
+        var alertDiv = document.getElementById("alert-div");
+
+        // Wait for 5 seconds and then hide the alert
+        setTimeout(function () {
+            alertDiv.style.display = "none";
+        }, 3000);
+    </script>
+}
+
+
+<div class="container">
+    <div class="row align-items-center mb-4">
+        <!-- Tiêu đề danh sách bên trái -->
+        <!-- Nút thêm mới -->
+        <div class="col-auto ms-3">
+            <a asp-controller="AccountUser" asp-action="Create" class="btn btn-custom-sea">
+                Thêm user mới
+            </a>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive" style="width:90%; margin:0 auto;">
+        <table id="customerDatatable" class="ant-table ant-table-bordered ant-table-striped ant-table-responsive custom-table" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Action</th>
+                    <th>No</th>
+                    <th>Họ</th>
+                    <th>Tên</th>
+                    <th>SDT</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+@section Scripts
+    {
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/accountuserdatatable.js"></script>
+}

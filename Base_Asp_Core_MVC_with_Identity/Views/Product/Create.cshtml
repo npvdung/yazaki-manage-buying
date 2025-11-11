@@ -1,0 +1,322 @@
+﻿@model Product
+<style>
+    /* Tổng thể container */
+    .container-a {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        /*background-color: #f9f9f9;*/
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header form */
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .flex h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-buttons .btn {
+        font-size: 16px;
+        padding: 8px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .form-buttons .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .form-buttons .btn-cancel {
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-cancel:hover {
+        }
+
+    /* Form layout */
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+        .form-section h3 {
+            font-size: 20px;
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+    /* Row & Columns */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .col-md-6 {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    /* Form nhóm */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+            /* Hover và trạng thái */
+            .form-group input:hover {
+                background-color: #f5f5f5;
+            }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+</style>
+
+<div class="container-a">
+    <!-- Tiêu đề và nút -->
+    <!-- Form -->
+    <form method="post">
+        <div class="flex">
+            <div class="div-right">
+                <h2>Thêm mặt hàng mới</h2>
+            </div>
+            <div class="form-buttons div-left">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
+                <a href="/Product" class="btn btn-cancel">Cancel</a>
+            </div>
+        </div>
+        <!-- Primary Information -->
+        <div class="form-section div-clear">
+            <div class="section-title">Thông tin</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.ProductCode, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="ProductCode">
+                    <span asp-validation-for="ProductCode" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="ProductName">
+                    <span asp-validation-for="ProductName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Description">
+                    <span asp-validation-for="Description" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Units, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Units">
+                    <span asp-validation-for="Units" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.QuotaId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.QuotaId,
+                    (IEnumerable<SelectListItem>)ViewData["QuotaLst"],
+                    "Choose Category",
+                    new { @id = "supplier", @class = "form-control col-md-4" })
+
+                    <span asp-validation-for="QuotaId" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="form-section">
+            <div class="section-title">Chi tiết</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.ManufacturerId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.ManufacturerId,
+                    (IEnumerable<SelectListItem>)ViewData["ManufacturerLst"],
+                    "Choose Manufacturer",
+                    new {
+                        @class = "form-control col-md-8 dynamic-dropdown",
+                        data_type = "Manufacturer",
+                        data_target = "#manufacturerCode"
+                    })
+
+                    <span asp-validation-for="ManufacturerId" class="alert-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.MANUFACTURER_Data, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="MANUFACTURER_Data" id="manufacturerCode" readonly />
+                </div>
+
+
+
+                @* <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.IngredientGroupId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.IngredientGroupId,
+                    (IEnumerable<SelectListItem>)ViewData["IngredientGroupLst"],
+                    "Choose IngredientGroup",
+                    new {
+                        @class = "form-control col-md-8 dynamic-dropdown-1",
+                        data_type = "IngredientGroup",
+                        data_target = "#INGREDIENTSGROP"
+                    })
+
+                    <span asp-validation-for="IngredientGroupId" class="alert-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.INGREDIENTS_GROUP_Data, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="INGREDIENTS_GROUP_Data" id="INGREDIENTSGROP" readonly />
+                </div> *@
+
+
+
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.VenderId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(model => model.VenderId,
+                    (IEnumerable<SelectListItem>)ViewData["VendorLst"],
+                    "Choose Vendor",
+                    new {
+                        @class = "form-control col-md-8 dynamic-dropdown-2",
+                        data_type = "Vendor",
+                        data_target = "#CURRENCYNAME"
+                    })
+
+                    <span asp-validation-for="VenderId" class="alert-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.CURRENCYNAME, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="CURRENCYNAME" id="CURRENCYNAME" readonly />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.dynamic-dropdown').change(function () {
+            var dropdown = $(this); // Lấy dropdown hiện tại
+            var id = dropdown.val(); // Lấy giá trị của dropdown
+            var type = dropdown.attr('data_type'); // Lấy giá trị của thuộc tính data_type
+            var target = $(dropdown.attr('data_target')); // Lấy textbox target
+            if (id) {
+                $.ajax({
+                    url: '@Url.Action("GetDataForDropdown", "Product")',
+                    type: 'GET',
+                    data: { id: id, type: 'Manufacturer' }, // Gửi ID và type lên server
+                    success: function (response) {
+                        $('#manufacturerCode').val(response.value);
+                        target.val(response.value); // Điền dữ liệu vào textbox
+                    },
+                    error: function () {
+                        alert("Error fetching data!");
+                    }
+                });
+            } else {
+                target.val(''); // Xóa textbox nếu không chọn gì
+            }
+        });
+    });
+
+    @* $(document).ready(function () {
+        $('.dynamic-dropdown-1').change(function () {
+            var dropdown = $(this); // Lấy dropdown hiện tại
+            var id = dropdown.val(); // Lấy giá trị của dropdown
+            var type = dropdown.attr('data_type'); // Lấy giá trị của thuộc tính data_type
+            var target = $(dropdown.attr('data_target')); // Lấy textbox target
+            if (id) {
+                $.ajax({
+                    url: '@Url.Action("GetDataForDropdown", "Product")',
+                    type: 'GET',
+                    data: { id: id, type: 'IngredientGroup' }, // Gửi ID và type lên server
+                    success: function (response) {
+                        $('#INGREDIENTSGROP').val(response.value);
+                        target.val(response.value); // Điền dữ liệu vào textbox
+                    },
+                    error: function () {
+                        alert("Error fetching data!");
+                    }
+                });
+            } else {
+                target.val(''); // Xóa textbox nếu không chọn gì
+            }
+        });
+    }); *@
+
+    $(document).ready(function () {
+        $('.dynamic-dropdown-2').change(function () {
+            var dropdown = $(this); // Lấy dropdown hiện tại
+            var id = dropdown.val(); // Lấy giá trị của dropdown
+            var type = dropdown.attr('data_type'); // Lấy giá trị của thuộc tính data_type
+            var target = $(dropdown.attr('data_target')); // Lấy textbox target
+            if (id) {
+                $.ajax({
+                    url: '@Url.Action("GetDataForDropdown", "Product")',
+                    type: 'GET',
+                    data: { id: id, type: 'Vendor' }, // Gửi ID và type lên server
+                    success: function (response) {
+                        $('#CURRENCYNAME').val(response.value);
+                        target.val(response.value); // Điền dữ liệu vào textbox
+                    },
+                    error: function () {
+                        alert("Error fetching data!");
+                    }
+                });
+            } else {
+                target.val(''); // Xóa textbox nếu không chọn gì
+            }
+        });
+    });
+
+</script>

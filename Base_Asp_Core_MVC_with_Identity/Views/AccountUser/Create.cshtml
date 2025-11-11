@@ -1,0 +1,202 @@
+﻿@model Base_Asp_Core_MVC_with_Identity.Models.View.AccountUserView
+<style>
+    /* Tổng thể container */
+    .container-a {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        /*background-color: #f9f9f9;*/
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header form */
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .flex h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-buttons .btn {
+        font-size: 16px;
+        padding: 8px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .form-buttons .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .form-buttons .btn-cancel {
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-cancel:hover {
+        }
+
+    /* Form layout */
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+        .form-section h3 {
+            font-size: 20px;
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+    /* Row & Columns */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .col-md-6 {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    /* Form nhóm */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+            /* Hover và trạng thái */
+            .form-group input:hover {
+                background-color: #f5f5f5;
+            }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+</style>
+
+<div class="container-a">
+    <!-- Tiêu đề và nút -->
+    <!-- Form -->
+    <form method="post">
+        <div class="flex">
+            <div class="div-right">
+                <h2>Thêm user</h2>
+            </div>
+            <div class="form-buttons div-left">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
+                <a href="/AccountUser" class="btn btn-cancel">Cancel</a>
+            </div>
+        </div>
+        <!-- Primary Information -->
+        <div class="form-section div-clear">
+            <div class="section-title">Thông tin</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="FirstName">
+                    <span asp-validation-for="FirstName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="LastName">
+                    <span asp-validation-for="LastName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Email">
+                    <span asp-validation-for="Email" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="PhoneNumber">
+                    <span asp-validation-for="PhoneNumber" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="form-section">
+            <div class="section-title">Chi tiết</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Address" id="ProductData" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.BirthDate, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="date" class="form-control mb-3 col-md-8" asp-for="BirthDate">
+                    <span asp-validation-for="BirthDate" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Code, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Code" readonly>
+                    <span asp-validation-for="Code" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Department, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Department">
+                    <span asp-validation-for="Department" class="alert-danger"></span>
+                </div
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8" asp-for="Password">
+                    <span asp-validation-for="Password" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+<script>
+
+</script>

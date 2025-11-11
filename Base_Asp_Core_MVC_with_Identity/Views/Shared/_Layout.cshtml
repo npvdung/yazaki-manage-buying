@@ -1,0 +1,713 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]Yazaki - Quản lý mua vật liệu</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Base_Asp_Core_MVC_with_Identity.styles.css" asp-append-version="true" />
+
+    <!-- Favicon -->
+    <link href="~/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet" />
+    <!-- Customized Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+
+    <!-- Template Stylesheet -->
+    <style>
+        /* Reset some basic styles */
+        /* Global Styles */
+        /* Reset CSS */
+        /* Reset CSS */
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e3e6f0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 1.25rem;
+        }
+
+        .navbar-nav .nav-link {
+            color: #555;
+            padding: 10px 15px;
+            font-weight: 500;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+            .navbar-nav .nav-link:hover,
+            .navbar-nav .nav-item.active .nav-link {
+                color: #007bff;
+                background-color: #f1f5f9;
+                border-radius: 4px;
+            }
+
+        /* Dropdown Menu */
+        .navbar-nav .nav-item .dropdown-menu {
+            background-color: #ffffff;
+            border: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+            .navbar-nav .nav-item .dropdown-menu .dropdown-item {
+                color: #333;
+                padding: 10px 20px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+                .navbar-nav .nav-item .dropdown-menu .dropdown-item:hover {
+                    background-color: #f1f5f9;
+                    color: #007bff;
+                }
+
+        /* Search and Profile */
+        /*.navbar .search-box input {
+                                                    border-radius: 20px 0 0 20px;
+                                                    border: 1px solid #ddd;
+                                                    border-right: none;
+                                                    height: 34px;
+                                                    padding: 5px 10px;
+                                                    width: 200px;
+                                                }
+
+                                                .navbar .search-box button {
+                                                    border-radius: 0 20px 20px 0;
+                                                    border: 1px solid #ddd;
+                                                    background-color: #007bff;
+                                                    color: #fff;
+                                                    height: 34px;
+                                                    padding: 5px 10px;
+                                                    transition: background-color 0.3s;
+                                                }
+
+                                                .navbar .search-box button:hover {
+                                                    background-color: #0056b3;
+                                                }*/
+
+        .profile img {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+            .profile img:hover {
+                transform: scale(1.1);
+            }
+
+        /* Dashboard Main Content */
+        .content {
+            padding: 20px;
+        }
+
+        /* Dashboard Card Styles */
+        .dashboard-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+            justify-content: space-between;
+        }
+
+        .dashboard-card {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e3e6f0;
+            flex: 1 1 220px;
+            text-align: center;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+
+            .dashboard-card:hover {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                transform: translateY(-5px);
+            }
+
+            .dashboard-card h5 {
+                font-size: 14px;
+                color: #6c757d;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .dashboard-card .value {
+                font-size: 22px;
+                font-weight: bold;
+                color: #007bff;
+            }
+
+            .dashboard-card .subtext {
+                color: #6c757d;
+                font-size: 12px;
+            }
+
+        /* Traffic and Location Styles */
+        .chart-card, .location-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e3e6f0;
+            transition: box-shadow 0.3s, transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+            .chart-card:hover, .location-card:hover {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                transform: translateY(-5px);
+            }
+
+        .chart-placeholder, .map-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        /* Navbar Styles */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 0 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 20px;
+            color: #000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .navbar-brand:hover {
+                color: #007bff;
+            }
+
+        .navbar-item {
+            margin: 0 10px;
+            font-size: 18px;
+            color: #000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: 600; /* Độ dày chữ */
+            transition: all 0.3s ease;
+            margin-right: 38px;
+        }
+
+            .navbar-item i {
+                margin-right: 5px;
+                font-size: 16px;
+                color: #007bff;
+                transition: color 0.3s ease;
+            }
+
+            .navbar-item:hover {
+                background-color: #e9f2fb;
+                color: #007bff;
+            }
+
+            .navbar-item.active {
+                color: #007bff;
+                font-weight: bold;
+                border-bottom: 2px solid #007bff;
+            }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 235px;
+            top: 35px;
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+            .dropdown-content a {
+                padding: 10px 15px;
+                display: block;
+                color: #000;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500; /* Độ dày chữ trong dropdown */
+                transition: background 0.3s ease, color 0.3s ease;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #f1f1f1;
+                    color: #007bff;
+                    width: 235px;
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 5px 10px;
+            background-color: #f8f9fa;
+        }
+
+            .search-box input {
+                border: none;
+                outline: none;
+                padding: 5px;
+                background: none;
+                width: 150px;
+                color: #333;
+            }
+
+                .search-box input::placeholder {
+                    color: #aaa;
+                }
+
+            .search-box button {
+                border: none;
+                background: none;
+                color: #007bff;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+        .icon-group {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+            .icon-group i {
+                font-size: 18px;
+                color: #6c757d;
+                position: relative;
+                margin: 0 10px;
+                transition: color 0.3s ease;
+            }
+
+                .icon-group i:hover {
+                    color: #007bff;
+                }
+
+            .icon-group .badge {
+                position: absolute;
+                top: -5px;
+                right: -10px;
+                background-color: red;
+                color: white;
+                border-radius: 50%;
+                font-size: 10px;
+                padding: 2px 5px;
+            }
+
+        .profile-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-left: 10px;
+            border: 2px solid #ddd;
+            transition: border-color 0.3s ease;
+        }
+
+            .profile-icon:hover {
+                border-color: #007bff;
+            }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f9fa; /* Màu nền sáng hơn */
+            padding: 0 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 20px;
+            color: #000; /* Chữ màu đen */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .navbar-brand:hover {
+                color: #007bff; /* Chuyển sang màu xanh khi hover */
+            }
+
+        .navbar-item {
+            margin: 0 10px;
+            font-size: 15px;
+            color: #000; /* Chữ màu đen */
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: 600; /* Độ dày chữ */
+            transition: all 0.3s ease;
+        }
+
+            .navbar-item:hover {
+                background-color: #e9f2fb; /* Màu nền khi hover */
+                color: #007bff; /* Chữ màu xanh khi hover */
+            }
+
+            .navbar-item.active {
+                color: #007bff; /* Màu chữ cho item active */
+                font-weight: bold;
+                border-bottom: 2px solid #007bff; /* Gạch dưới cho item active */
+            }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ffffff; /* Màu nền dropdown */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            min-width: 235px;
+            top: 35px;
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+            .dropdown-content a {
+                padding: 10px 15px;
+                display: block;
+                color: #000; /* Chữ màu đen trong dropdown */
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500; /* Độ dày chữ trong dropdown */
+                transition: background 0.3s ease, color 0.3s ease;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #f1f1f1; /* Màu nền khi hover trong dropdown */
+                    color: #007bff; /* Chữ màu xanh khi hover trong dropdown */
+                }
+
+        a {
+            color: #23395d !important;
+        }
+
+        .navbar-item i {
+            color: #23395d !important;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-icon {
+            display: flex; /* Đảm bảo nội dung bên trong có thể canh chỉnh */
+            align-items: center; /* Căn giữa nội dung */
+            padding: 5px 10px; /* Khoảng cách bên trong */
+            color: #000; /* Màu chữ đen */
+            font-size: 15px; /* Kích thước chữ */
+            background-color: transparent; /* Nền trong suốt, có thể thêm màu nếu cần */
+            border-radius: 5px; /* Bo góc nhẹ */
+            transition: background-color 0.3s ease; /* Hiệu ứng chuyển tiếp khi hover */
+        }
+
+            .profile-icon:hover {
+                background-color: #e9f2fb; /* Màu nền khi hover */
+            }
+
+        .icon-group i {
+            font-size: 18px; /* Kích thước biểu tượng */
+            color: #6c757d; /* Màu chữ cho biểu tượng */
+            margin: 0 10px; /* Khoảng cách giữa các biểu tượng */
+            transition: color 0.3s ease; /* Hiệu ứng chuyển tiếp cho màu chữ */
+        }
+
+            .icon-group i:hover {
+                color: #007bff; /* Màu khi hover trên biểu tượng */
+            }
+
+        ul.navbar-nav.ms-auto {
+            color: #555 !important;
+            flex-direction: row !important;
+        }
+
+        li.nav-item {
+            color: #555 !important;
+        }
+
+        a.nav-link.text-light {
+            color: #555 !important;
+        }
+
+        form.form-inline {
+            color: #555 !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #555 !important;
+        }
+
+
+        .logo {
+            height: 60px; /* Chiều cao của logo */
+            width: auto; /* Chiều rộng tự động để giữ tỷ lệ */
+            /*margin-right: 20px; /* Khoảng cách giữa logo và các item khác trong navbar */ */ transition: transform 0.3s ease; /* Hiệu ứng khi hover */
+        }
+
+            .logo:hover {
+                transform: scale(1.05); /* Phóng to logo khi hover */
+            }
+
+        .navbar-brand {
+            display: flex; /* Đảm bảo logo và các item khác căn giữa */
+            align-items: center; /* Căn giữa theo chiều dọc */
+        }
+        /* Main Content Container */
+        main.container {
+            background-color: #FFFFFF; /* Nền trắng để tạo cảm giác sạch sẽ */
+            border-radius: 12px; /* Bo tròn các góc */
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1); /* Bóng đổ để tạo chiều sâu */
+            max-width: 95%; /* Tăng độ rộng */
+            border: 1px solid #E0E0E0; /* Viền xám nhạt để làm nổi bật khối chứa */
+        }
+
+            /* Nội dung bên trong */
+            main.container .table-responsive {
+                padding: 10px; /* Thêm khoảng cách bên trong */
+                border-radius: 8px; /* Bo tròn cho phần chứa bảng */
+                background-color: #FAFAFA; /* Nền xám nhạt để bảng nổi bật */
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ cho khối chứa bảng */
+            }
+
+        /* Tùy chọn bổ sung để tạo cảm giác rộng rãi */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+        /* Các phần còn lại giữ nguyên */
+        .navbar-item.active, .dropdown-content .active {
+            font-weight: bold;
+            color: #ff6600; /* Màu sắc tùy chỉnh */
+        }
+
+        .dropdown-content .active {
+            background-color: #80C4E9; /* Đổi nền nếu cần */
+        }
+
+    </style>
+
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="/" class="navbar-brand">
+                <img src="~/image/logophuong.png" alt="phuong" class="logo" style="height:38px; width:auto; object-fit:contain;">
+            </a>
+            <a class="navbar-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+               asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-home"></i> Home
+            </a>
+
+            <div class="navbar-item dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ||
+                                             ViewContext.RouteData.Values["controller"]?.ToString() == "Vendor" ||
+                                             ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" ||
+                                             ViewContext.RouteData.Values["controller"]?.ToString() == "IngredientsGroup" ||
+                                             ViewContext.RouteData.Values["controller"]?.ToString() == "Currency" ||
+ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ||
+                                             ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")">
+                <a href="#"><i class="fas fa-cubes"></i> Danh sách <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
+                       asp-area="" asp-controller="Product" asp-action="Index">Mặt hàng</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vendor" ? "active" : "")"
+                       asp-area="" asp-controller="Vendor" asp-action="Index">Nhà cung cấp</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+                       asp-area="" asp-controller="Category" asp-action="Index">Loại vật tư</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Currency" ? "active" : "")"
+                       asp-area="" asp-controller="Currency" asp-action="Index">Loại tiền tệ</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" ? "active" : "")"
+                       asp-area="" asp-controller="Manufacture" asp-action="Index">Nhà sản xuất</a>
+                    @* <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "IngredientsGroup" ? "active" : "")"
+                       asp-area="" asp-controller="IngredientsGroup" asp-action="Index"> Thành phần</a> *@
+                    <!-- Add similar conditions for other links -->
+                </div>
+            </div>
+            <div class="navbar-item dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "AccountUser" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "RoleManager" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "UserRoles" ? "active" : "")">
+                <a href="#"><i class="fas fa-user"></i> Quản lý user <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "AccountUser" ? "active" : "")"
+                       asp-area="" asp-controller="AccountUser" asp-action="Index">User</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "RoleManager" ? "active" : "")"
+                       asp-area="" asp-controller="RoleManager" asp-action="Index">Vai trò</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "UserRoles" ? "active" : "")"
+                       asp-area="" asp-controller="UserRoles" asp-action="Index">Quyền hạn</a>
+                </div>
+            </div>
+
+            <div class="navbar-item dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "Quota" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "PurchaseContract" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "PurchaseOrder" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "ShipmentRequest" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "ItemReceipt" ||
+                                    ViewContext.RouteData.Values["controller"]?.ToString() == "BillPayment" ? "active" : "")">
+                <a href="#"><i class="fas fa-shopping-cart"></i> Mua hàng <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Quota" ? "active" : "")"
+                       asp-area="" asp-controller="Quota" asp-action="Index">Kế hoạch mua hàng</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "PurchaseContract" ? "active" : "")"
+                       asp-area="" asp-controller="PurchaseContract" asp-action="Index">Hợp đồng</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "PurchaseOrder" ? "active" : "")"
+                       asp-area="" asp-controller="PurchaseOrder" asp-action="Index">Đơn hàng</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "ShipmentRequest" ? "active" : "")"
+                       asp-area="" asp-controller="ShipmentRequest" asp-action="Index">Yêu cầu giao hàng</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "ItemReceipt" ? "active" : "")"
+                       asp-area="" asp-controller="ItemReceipt" asp-action="Index">Phiếu nhập kho</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ? "active" : "")"
+                       asp-area="" asp-controller="Inventory" asp-action="Index">Kho</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "BillPayment" ? "active" : "")"
+                       asp-area="" asp-controller="BillPayment" asp-action="Index">Hoá đơn</a>
+                </div>
+            </div>
+
+            <div class="navbar-item dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "ReturnAuthorization" ? "active" : "")">
+                <a href="#"><i class="fas fa-refresh"></i> Trả hàng <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "ReturnAuthorization" ? "active" : "")"
+                       asp-area="" asp-controller="ReturnAuthorization" asp-action="Index">Đơn hàng trả lại</a>
+                </div>
+            </div>
+
+            <div class="navbar-item dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "Report" ||
+                                   ViewContext.RouteData.Values["controller"]?.ToString() == "ReportView" ? "active" : "")">
+                <a href="#"><i class="fas fa-file-text"></i> Báo cáo <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Report" ? "active" : "")"
+                       asp-area="" asp-controller="Report" asp-action="Index">Báo cáo mua hàng</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "ReportView" ? "active" : "")"
+                       asp-area="" asp-controller="ReportView" asp-action="Index">Báo cáo trả hàng</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar-right">
+            @* <div class="search-box">
+            <input type="text" placeholder="Search...">
+            <button type="button"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="icon-group">
+            @*       <i class="fas fa-envelope"></i><span class="badge">3</span>
+            <i class="fas fa-bell"></i><span class="badge">5</span>
+            
+            @*<img src="https://via.placeholder.com/35" alt="Profile" class="profile-icon">*@
+            <div>
+                <partial alt="Profile" class="profile-icon custom-login" name="_LoginPartial" />
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Main content -->
+    <main class="container py-3">
+        <div class="table-responsive" style="width:90%; margin:0 auto;">
+            @RenderBody()
+        </div>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="~/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <script src="~/js/main.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,159 @@
+﻿@using Base_Asp_Core_MVC_with_Identity.Models.View
+@model List<ManageUserRolesViewModel>
+@{
+    ViewData["Title"] = "Manage User Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="manage-user-roles-container">
+    <form method="post" class="custom-form">
+        <div class="card custom-card">
+            <div class="card-header custom-card-header">
+                <h2 class="form-title">Manage User Roles</h2>
+                <p class="form-subtitle">Add/Remove Roles for User: <strong>@ViewBag.UserName</strong>.</p>
+            </div>
+            <div class="card-body custom-card-body">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="form-check custom-form-check">
+                        <input type="hidden" asp-for="@Model[i].RoleId" />
+                        <input type="hidden" asp-for="@Model[i].RoleName" />
+                        <input asp-for="@Model[i].Selected" class="form-check-input custom-checkbox" />
+                        <label class="form-check-label custom-form-label" asp-for="@Model[i].Selected">
+                            @Model[i].RoleName
+                        </label>
+                    </div>
+                }
+                <div asp-validation-summary="All" class="validation-summary text-danger"></div>
+            </div>
+            <div class="card-footer custom-card-footer">
+                <input type="submit" value="Update" class="btn btn-primary custom-btn" />
+                <a asp-action="Index" class="btn">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    /* Container */
+    .manage-user-roles-container {
+        max-width: 55%;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #F9F9F9;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Style */
+    .custom-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Card */
+    .custom-card {
+        border: none;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .custom-card-header {
+        background-color: #007BFF; /* Xanh đậm */
+        color: #FFFFFF;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .form-title {
+        font-size: 24px;
+        margin: 0;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-subtitle {
+        font-size: 16px;
+        margin: 10px 0 0 0;
+        font-weight: 400;
+        opacity: 0.9;
+    }
+
+    /* Card Body */
+    .custom-card-body {
+        padding: 20px 30px;
+    }
+
+    .custom-form-check {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+    }
+
+    .custom-checkbox {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        accent-color: #007BFF; /* Màu xanh checkbox */
+        cursor: pointer;
+    }
+
+    .custom-form-label {
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    /* Validation Summary */
+    .validation-summary {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #DC3545;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    /* Card Footer */
+    .custom-card-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        padding: 20px 30px;
+        background-color: #F7F9FA;
+    }
+
+    .custom-btn {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    /* Submit Button */
+    .custom-btn-submit {
+        background-color: #007BFF; /* Xanh đậm */
+        color: #FFFFFF;
+    }
+
+        .custom-btn-submit:hover {
+            background-color: #0056b3; /* Màu xanh hover */
+        }
+
+    /* Cancel Button */
+    .custom-btn-cancel {
+        background-color: #E0E0E0; /* Màu xám nhạt */
+        color: #333333;
+    }
+
+        .custom-btn-cancel:hover {
+            background-color: #CCCCCC; /* Màu xám đậm hover */
+        }
+
+</style>

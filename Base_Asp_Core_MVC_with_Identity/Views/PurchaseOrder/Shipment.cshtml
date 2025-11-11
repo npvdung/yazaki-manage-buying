@@ -1,0 +1,454 @@
+﻿@using MangagerBuyProduct.Models.View;
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Base_Asp_Core_MVC_with_Identity.Models.ShipmentRequest
+
+@{
+    var purchaseOrders = ViewData["PurchaseOrders"] as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var statusList     = ViewData["ShipStatus"]     as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+}
+<style>
+    /* Tổng thể container */
+    .container-a {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        /*background-color: #f9f9f9;*/
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Header form */
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .flex h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    .form-buttons .btn {
+        font-size: 16px;
+        padding: 8px 20px;
+        border-radius: 5px;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .form-buttons .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .form-buttons .btn-cancel {
+        border: none;
+        color: white;
+    }
+
+        .form-buttons .btn-cancel:hover {
+        }
+
+    /* Form layout */
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+        .form-section h3 {
+            font-size: 20px;
+            color: #555;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+    /* Row & Columns */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .col-md-6 {
+        flex: 1 1 calc(50% - 10px);
+    }
+
+    /* Form nhóm */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+            /* Hover và trạng thái */
+            .form-group input:hover {
+                background-color: #f5f5f5;
+            }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .detail-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+        .detail-row .form-group {
+            flex: 1; /* Chia đều không gian giữa các trường */
+        }
+
+    .btn-remove-detail {
+        margin-top: 25px;
+        height: 40px;
+    }
+
+</style>
+<div class="container">
+    <form method="post">
+        <div class="flex">
+            <div class="div-right">
+                <h2>Thêm thông tin ship hàng</h2>
+            </div>
+        </div>
+        <!-- Master Information -->
+        <div class="form-section">
+            <div class="section-title">Thông tin đơn</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.ShipmentRequestCode)
+                    <input type="text" class="form-control" asp-for="ShipmentRequestCode" readonly />
+                    <span asp-validation-for="ShipmentRequestCode"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.EmplouyeeId)
+                    <input type="text" class="form-control" asp-for="EmplouyeeId" />
+                    <span asp-validation-for="EmplouyeeId"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.PurchaseOrderId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(m => m.PurchaseOrderId,
+                        purchaseOrders,
+                        "Choose PurchaseOrder",
+                        new { @class = "form-control col-md-8" })
+                    <span asp-validation-for="PurchaseOrderId" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.DropDownListFor(m => m.Status,
+                        statusList,
+                        "Choose Status",
+                        new { @class = "form-control col-md-4" })
+                    <span asp-validation-for="Status" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmount)
+                    <input type="number" class="form-control" id="TotalAmount" asp-for="TotalAmount" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalDiscoutAmount)
+                    <input type="number" class="form-control" id="TotalDiscoutAmount" asp-for="TotalDiscoutAmount" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmountIncludeTax)
+                    <input type="number" class="form-control" id="TotalAmountIncludeTax" asp-for="TotalAmountIncludeTax" step="0.01" />
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
+                    <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount" asp-for="TotalAmountIncludeTaxAndDiscount" step="0.01" />
+                </div>
+                <!-- Other fields for PurchaseContract -->
+            </div>
+        </div>
+
+        <!-- Detail Information -->
+        <div class="form-section">
+            <div class="section-title">Thông tin đơn</div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.ShipmentRequestType, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="ShipmentRequestType" id="manufacturerCode"  />
+                    <span asp-validation-for="ShipmentRequestType" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Method, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Method" id="manufacturerCode"  />
+                    <span asp-validation-for="Method" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Address" id="manufacturerCode"  />
+                    <span asp-validation-for="Address" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DelyveryPersonName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DelyveryPersonName" id="manufacturerCode" />
+                    <span asp-validation-for="DelyveryPersonName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DelyveryPersonPhone, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DelyveryPersonPhone" id="manufacturerCode"  />
+                    <span asp-validation-for="DelyveryPersonPhone" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Note" id="manufacturerCode"  />
+                    <span asp-validation-for="Note" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.RecipientsName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="RecipientsName" id="manufacturerCode"  />
+                    <span asp-validation-for="RecipientsName" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.RecipientsPhone, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="RecipientsPhone" id="manufacturerCode"  />
+                    <span asp-validation-for="RecipientsPhone" class="alert-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DateShip, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="date" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DateShip" id="manufacturerCode"  />
+                    <span asp-validation-for="DateShip" class="alert-danger"></span>
+                </div>
+                 <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.DiscountAmout, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="int" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DiscountAmout" id="manufacturerCode"  />
+                    <span asp-validation-for="DiscountAmout" class="alert-danger"></span>
+                </div>
+                 <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <input type="int" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Amount" id="manufacturerCode"  />
+                    <span asp-validation-for="Amount" class="alert-danger"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Buttons -->
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a href="@Url.Action("Index")" class="btn btn-cancel">Cancel</a>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function calculateTotals() {
+        const rows = document.querySelectorAll('#details-container .detail-row');
+        let totalAmount = 0;
+
+        rows.forEach(row => {
+            const totalAmountField = row.querySelector('input[name*="TotalAmount"]');
+            const totalValue = parseFloat(totalAmountField.value) || 0;
+            totalAmount += totalValue;
+        });
+        const discount = parseFloat($('#TotalDiscoutAmount').val()) || 0;
+        const tax = parseFloat($('#TotalAmountIncludeTax').val()) || 0;
+
+        // Tính toán giá trị cuối cùng
+        const totalAmountIncludeTaxAndDiscount = totalAmount - discount - tax;
+
+        // Cập nhật giá trị vào trường TotalAmountIncludeTaxAndDiscount
+        $('#TotalAmountIncludeTaxAndDiscount').val(totalAmountIncludeTaxAndDiscount.toFixed(2));
+        // Cập nhật giá trị tổng vào các trường TotalAmount và TotalAmountIncludeTaxAndDiscount
+        document.getElementById('TotalAmount').value = totalAmount.toFixed(2);
+        document.getElementById('TotalAmountIncludeTaxAndDiscount').value = totalAmountIncludeTaxAndDiscount.toFixed(2);
+    }
+
+    // Gắn sự kiện khi thêm detail
+    document.getElementById('add-detail').addEventListener('click', function () {
+        const container = document.getElementById('details-container');
+        const rowCount = container.children.length;
+
+        const newRow = document.createElement('div');
+        newRow.classList.add('detail-row');
+        newRow.innerHTML = `
+                                                                                  <div class="form-group">
+                                                    <label for="PurchaseContractDetails_${rowCount}__ProductId">Product</label>
+                                                    <select name="PurchaseContractDetails[${rowCount}].ProductId" class="form-control">
+                                                        <option value="">Select Product</option>
+                                                        ${document.getElementById('product-template').innerHTML} <!-- Lấy dữ liệu từ template -->
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="PurchaseContractDetails_${rowCount}__Quantity">Quantity</label>
+                                                    <input type="number" name="PurchaseContractDetails[${rowCount}].Quantity" class="form-control detail-input" placeholder="Enter Quantity" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="PurchaseContractDetails_${rowCount}__Price">Price</label>
+                                                    <input type="number" name="PurchaseContractDetails[${rowCount}].Price" class="form-control detail-input" placeholder="Enter Price" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="PurchaseContractDetails_${rowCount}__TotalAmount">Total Amount</label>
+                                                    <input type="number" name="PurchaseContractDetails[${rowCount}].TotalAmount" class="form-control" placeholder="Enter Total Amount" readonly />
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-danger btn-remove-detail">Remove</button>
+                                                </div>
+                                                                        `;
+
+        container.appendChild(newRow);
+
+        // Gắn sự kiện tính toán tổng tiền
+        const inputs = newRow.querySelectorAll('.detail-input');
+        inputs.forEach(input => input.addEventListener('input', calculateRowTotal));
+
+        // Xử lý sự kiện xóa chi tiết
+        newRow.querySelector('.btn-remove-detail').addEventListener('click', function () {
+            container.removeChild(newRow);
+        });
+    });
+
+    // Hàm tính tổng cho từng dòng
+    function calculateRowTotal(event) {
+        const row = event.target.closest('.detail-row');
+        const quantity = parseFloat(row.querySelector('input[name*="Quantity"]').value) || 0;
+        const price = parseFloat(row.querySelector('input[name*="Price"]').value) || 0;
+
+        const totalField = row.querySelector('input[name*="TotalAmount"]');
+        totalField.value = (quantity * price).toFixed(2);
+
+        // Tính tổng cho master
+        calculateTotals();
+    }
+    $('.dynamic-dropdown').change(function () {
+        const vendorId = $(this).val(); // Lấy ID Vendor
+        const targetDropdown = $('#product-template'); // Dropdown sản phẩm ẩn
+
+        if (vendorId) {
+            $.ajax({
+                url: '@Url.Action("GetDataForDropdown", "PurchaseContract")',
+                type: 'GET',
+                data: { id: vendorId, type: 'Manufacturer' },
+                success: function (response) {
+                    // Cập nhật nội dung template
+                    targetDropdown.empty();
+                    $.each(response, function (index, item) {
+                        debugger;
+                        targetDropdown.append(`<option value="${item.value}">${item.text}</option>`);
+                    });
+                    // Reset tất cả các dropdown sản phẩm trong chi tiết
+                    resetProductDropdowns();
+                    $.ajax({
+                        url: '@Url.Action("GetCurrencyName", "PurchaseContract")',
+                        type: 'GET',
+                        data: { vendorId: vendorId }, // Gửi Vendor ID
+                        success: function (currencyResponse) {
+                            // Gán giá trị cho trường CurrencyName
+                            $('#CurrencyName').val(currencyResponse.currencyName);
+                        },
+                        error: function () {
+                            alert('Error fetching currency information!');
+                        }
+                    });
+
+                },
+                error: function () {
+                    alert('Error fetching products!');
+                }
+            });
+        } else {
+            targetDropdown.empty();
+            // Reset tất cả các dropdown sản phẩm trong chi tiết
+            resetProductDropdowns();
+        }
+    });
+
+    // Hàm reset tất cả dropdown sản phẩm trong các hàng chi tiết
+    function resetProductDropdowns() {
+        const detailDropdowns = $('#details-container select[name*="ProductId"]');
+        detailDropdowns.each(function () {
+            const dropdown = $(this);
+            dropdown.empty(); // Xóa nội dung dropdown
+            dropdown.append('<option value="">Select Product</option>'); // Thêm option mặc định
+            dropdown.append($('#product-template').html()); // Copy từ product-template
+        });
+    }
+
+    $(document).ready(function () {
+        // Lắng nghe sự kiện thay đổi trên các trường input liên quan
+        $('#TotalDiscoutAmount, #TotalAmountIncludeTax').on('input', function () {
+            // Lấy giá trị từ các trường
+            const totalAmount = parseFloat($('#TotalAmount').val()) || 0;
+            const discount = parseFloat($('#TotalDiscoutAmount').val()) || 0;
+            const tax = parseFloat($('#TotalAmountIncludeTax').val()) || 0;
+
+            // Tính toán giá trị cuối cùng
+            const totalAmountIncludeTaxAndDiscount = totalAmount - discount - tax;
+
+            // Cập nhật giá trị vào trường TotalAmountIncludeTaxAndDiscount
+            $('#TotalAmountIncludeTaxAndDiscount').val(totalAmountIncludeTaxAndDiscount.toFixed(2));
+        });
+    });
+
+    function updateTotalAmountIncludeTaxAndDiscount() {
+        var totalAmount = parseFloat(document.getElementById("TotalAmount").value) || 0;
+        var totalDiscountAmount = parseFloat(document.getElementById("TotalDiscoutAmount").value) || 0;
+        var totalAmountIncludeTax = parseFloat(document.getElementById("TotalAmountIncludeTax").value) || 0;
+
+        // Your logic for calculating TotalAmountIncludeTaxAndDiscount
+        var totalAmountIncludeTaxAndDiscount = totalAmount + totalDiscountAmount + totalAmountIncludeTax;
+
+        // Update the TotalAmountIncludeTaxAndDiscount field
+        document.getElementById("TotalAmountIncludeTaxAndDiscount").value = totalAmountIncludeTaxAndDiscount.toFixed(2);
+
+        // Now update the detail rows (if necessary, iterate through the rows and update)
+        var detailRows = document.getElementsByClassName("detail-row");
+        for (var i = 0; i < detailRows.length; i++) {
+            var price = parseFloat(detailRows[i].querySelector("[id*='Price']").value) || 0;
+            var quantity = parseFloat(detailRows[i].querySelector("[id*='Quantity']").value) || 0;
+
+            // Calculate total for each detail row
+            var detailTotalAmount = price * quantity;
+
+            // Update the TotalAmount field in the detail row
+            detailRows[i].querySelector("[id*='TotalAmount']").value = detailTotalAmount.toFixed(2);
+        }
+    }
+
+    // Add event listeners to detect changes
+    document.getElementById("TotalAmount").addEventListener("input", updateTotalAmountIncludeTaxAndDiscount);
+    document.getElementById("TotalDiscoutAmount").addEventListener("input", updateTotalAmountIncludeTaxAndDiscount);
+    document.getElementById("TotalAmountIncludeTax").addEventListener("input", updateTotalAmountIncludeTaxAndDiscount);
+
+</script>
+
+

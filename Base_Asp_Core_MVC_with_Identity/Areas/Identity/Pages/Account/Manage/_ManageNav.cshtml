@@ -1,0 +1,129 @@
+﻿@using Base_Asp_Core_MVC_with_Identity.Areas.Identity.Data;
+@inject SignInManager<UserSystemIdentity> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    ViewData["ActivePage"] = "Index"; // hoặc "Email", "ChangePassword", vv.
+}
+
+<ul class="nav flex-column custom-nav">
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a>
+    </li>
+    @if (hasExternalLogins)
+    {
+        <li class="nav-item">
+            <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" id="external-login" asp-page="./ExternalLogins">External Logins</a>
+        </li>
+    }
+   @* <li class="nav-item">
+        <a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor Authentication</a>
+    </li>*@
+   @* <li class="nav-item">
+        <a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal Data</a>
+    </li>*@
+</ul>
+
+<style>
+    /* General styles for nav */
+.custom-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.custom-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.custom-nav .nav-link {
+    display: block;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 6px;
+}
+
+.custom-nav .nav-link:hover {
+    background-color: #e0f7fa;
+    color: #007bff;
+}
+
+.custom-nav .nav-link.active, .custom-nav .nav-link:focus {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+.custom-nav .nav-link.active:hover {
+    background-color: #0056b3;
+}
+
+/* Active link style */
+.active-nav-item {
+    background-color: #007bff; /* Màu nền của item active */
+    color: #fff; /* Màu chữ của item active */
+    font-weight: bold; /* Độ đậm của chữ của item active */
+}
+/* General styles for nav */
+.custom-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.custom-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.custom-nav .nav-link {
+    display: block;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f9f9f9;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 6px;
+}
+
+.custom-nav .nav-link:hover {
+    background-color: #d0f4de; /* Màu xanh lá nhẹ khi hover */
+    color: #28a745; /* Màu xanh lá đậm khi hover */
+}
+
+.custom-nav .nav-link.active, .custom-nav .nav-link:focus {
+    background-color: #28a745; /* Màu xanh lá đậm cho item active */
+    color: #fff;
+    font-weight: bold;
+}
+
+.custom-nav .nav-link.active:hover {
+    background-color: #218838; /* Màu xanh lá đậm hơn khi hover item active */
+}
+
+/* Active link style */
+.active-nav-item {
+    background-color: #28a745; /* Màu nền của item active (xanh lá cây) */
+    color: #fff; /* Màu chữ của item active */
+    font-weight: bold; /* Độ đậm của chữ của item active */
+}
+
+
+</style>
