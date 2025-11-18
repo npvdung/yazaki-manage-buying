@@ -126,5 +126,28 @@ namespace MangagerBuyProduct.Controllers
             }
             return View(empobj);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAjax(Guid id)
+        {
+            try
+            {
+                var entity = await _context.vendors.FindAsync(id);
+                if (entity == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy nhà cung cấp." });
+                }
+
+                _context.vendors.Remove(entity);   // hoặc entity.Status = 1; nếu bạn muốn xoá mềm
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Xoá nhà cung cấp thành công." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Xoá thất bại: " + ex.Message });
+            }
+        }
+
     }
 }

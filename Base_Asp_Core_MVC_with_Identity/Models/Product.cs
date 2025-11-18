@@ -20,9 +20,9 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         public string? QuotaId { get; set; }
         [Display(Name = "Đơn vị đo lường")]
         public string? Units { get; set; }
-        [Required]
-        [Display(Name = "Tên nhà sản xuất")]
-        public string? ManufacturerId { get; set; }
+        // [Required]
+        // [Display(Name = "Tên nhà sản xuất")]
+        // public string? ManufacturerId { get; set; }
         [Display(Name = "Tên nhà cung cấp")]
         public string? SupplierId { get; set; }
         [Required]
@@ -31,9 +31,8 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [NotMapped]
         [Display(Name = "Loại tiền thanh toán")]
         public string CURRENCYNAME { get; set; }
-        [NotMapped]
-        [Display(Name = "Mã nhà sản xuất")]
-        public string MANUFACTURER_Data { get; set;}
-
+        // [NotMapped]
+        // [Display(Name = "Mã nhà sản xuất")]
+        // public string MANUFACTURER_Data { get; set;}
     }
 }

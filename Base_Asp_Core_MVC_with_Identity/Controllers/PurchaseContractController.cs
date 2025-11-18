@@ -79,16 +79,19 @@ namespace MangagerBuyProduct.Controllers
                 )
                 .ToList();
 
-            var productList = new List<SelectListItem>();
-            foreach (var item in result)
+            var productList = _context.Products
+            //.Where(p => p.Status == 0)      // nếu Product có trường Status thì có thể lọc thêm
+            .Select(p => new SelectListItem
             {
-                productList.Add(new SelectListItem
-                {
-                    Value = item.ProductId.ToString(),
-                    Text = $"{item.ProductName}-{item.Quantity}/{item.RemainingQuantity}"
-                });
-            }
-            ViewData["productList"] = productList;
+                Value = p.ID.ToString(),
+                // Hiển thị mã + tên cho dễ nhìn
+                Text  = $"{p.ProductCode} - {p.ProductName}"
+                // Nếu không có ProductCode thì dùng mỗi ProductName cũng được:
+                // Text = p.ProductName
+            })
+            .ToList();
+
+        ViewData["productList"] = productList;
         }
         // ===================================================
 
@@ -109,6 +112,14 @@ namespace MangagerBuyProduct.Controllers
             Expression<Func<PurchaseContract, string>> codeSelector = c => c.PurchaseContractCode;
             string autoCode = _commonService.GenerateCategoryCode(prefix, codeSelector);
 
+            // Lấy user đang đăng nhập
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                // Không có user => bắt đăng nhập lại
+                return Challenge(); // hoặc RedirectToAction("Login", "Account");
+            }
+
             var objItem = new PurchaseContractView
             {
                 PurchaseContractCode = autoCode,
@@ -116,15 +127,14 @@ namespace MangagerBuyProduct.Controllers
                 TotalAmountIncludeTaxAndDiscount = 0,
                 TotalAmountIncludeTax = 0,
                 TotalDiscoutAmount = 0,
-                PurchaseContractDetails = new List<PurchaseContractDetails>()
+                PurchaseContractDetails = new List<PurchaseContractDetails>(),
+                EmployeeName = $"{user.FirstName} {user.LastName}",   // tên hiển thị
+                Status = (int)EnumPurchaseContract.Wait               // trạng thái khởi tạo
             };
-
-            var user = await _userManager.GetUserAsync(User);
-            objItem.EmployeeName = user.FirstName + " " + user.LastName;
-            objItem.Status = (int)EnumPurchaseContract.Wait;
 
             return View(objItem);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -329,36 +339,23 @@ namespace MangagerBuyProduct.Controllers
         {
             if (type == "Manufacturer")
             {
-                var result = _context.Products
-                .Join(
-                    _context.quota,
-                    product => product.ID.ToString(),
-                    quota => quota.ProductId,
-                    (product, quota) => new
+                // Lấy các product theo VendorId, không JOIN quota
+                var products = _context.Products
+                    .Where(p => p.VenderId == id)          // VenderId là string
+                    .Select(p => new
                     {
-                        ProductId = product.ID,
-                        ProductName = product.ProductName,
-                        UsedQuantity = quota.UsedQuantity,
-                        RemainingQuantity = quota.RemainingQuantity,
-                        VenderId = product.VenderId
-                    }
-                ).ToList();
-
-                var products = result
-                   .Where(x => x.VenderId.ToString() == id)
-                   .DistinctBy(x => x.ProductId)
-                   .Select(item => new
-                   {
-                       Value = item.ProductId.ToString(),
-                       Text = $"{item.ProductName} - {item.UsedQuantity} / {item.RemainingQuantity}"
-                   })
-                   .ToList();
+                        Value = p.ID.ToString(),
+                        Text  = $"{p.ProductCode} - {p.ProductName}"
+                        // hoặc chỉ Text = p.ProductName
+                    })
+                    .ToList();
 
                 return Json(products);
             }
 
             return Json(new { value = "" });
         }
+
 
         [HttpGet]
         public IActionResult GetCurrencyName(string vendorId)

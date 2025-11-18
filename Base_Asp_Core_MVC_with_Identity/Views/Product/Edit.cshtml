@@ -174,7 +174,7 @@
             <div class="section-title">Chi tiết</div>
             <div class="row">
                 <!-- 2) SỬA CHỖ NÀY: Manufacturer -->
-                <div class="form-group col-md-6">
+                @* <div class="form-group col-md-6">
                     @Html.LabelFor(model => model.ManufacturerId, new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(
                         model => model.ManufacturerId,
@@ -187,12 +187,12 @@
                         }
                     )
                     <span asp-validation-for="ManufacturerId" class="alert-danger"></span>
-                </div>
+                </div> *@
 
-                <div class="form-group col-md-6">
+                @* <div class="form-group col-md-6">
                     @Html.LabelFor(model => model.MANUFACTURER_Data, new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="MANUFACTURER_Data" id="manufacturerCode" readonly />
-                </div>
+                </div> *@
 
                 <!-- 3) SỬA CHỖ NÀY: IngredientGroup -->
                 @* <div class="form-group col-md-6">

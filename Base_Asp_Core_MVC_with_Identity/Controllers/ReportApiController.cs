@@ -1,8 +1,7 @@
-﻿using Base_Asp_Core_MVC_with_Identity.CommonFile.IServiceCommon;
-using Base_Asp_Core_MVC_with_Identity.Data;
+﻿using Base_Asp_Core_MVC_with_Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Linq.Dynamic.Core;   // nếu bạn đang dùng OrderBy chuỗi
 
 namespace MangagerBuyProduct.Controllers
 {
@@ -18,6 +17,7 @@ namespace MangagerBuyProduct.Controllers
             _uid = uid;
             _context = context;
         }
+
         public IActionResult Index()
         {
             try
@@ -28,55 +28,62 @@ namespace MangagerBuyProduct.Controllers
                 var sortColumn = Request.Query["columns[" + Request.Query["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDirection = Request.Query["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Query["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-                int recordsTotal = 0;
-                //var customerData = (from tempcustomer in _context.Categories select tempcustomer);
 
-                var customerData = from tempcustomer in _context.purchaseOrderDetails
-                                   join temp1 in _context.Products on tempcustomer.ProductId equals temp1.ID.ToString() into tempTable
-                                   from leftJoinData in tempTable.DefaultIfEmpty()
-                                   join temp2 in _context.purchaseOrders on tempcustomer.PurchaseOrderId equals temp2.ID.ToString() into tempTable2
-                                   from leftJoinData2 in tempTable2.DefaultIfEmpty()
+                int pageSize = !string.IsNullOrEmpty(length) ? Convert.ToInt32(length) : 0;
+                int skip = !string.IsNullOrEmpty(start) ? Convert.ToInt32(start) : 0;
+
+                // JOIN chi tiết đơn hàng với sản phẩm & đơn hàng
+                var customerData = from d in _context.purchaseOrderDetails
+                                   join p in _context.Products
+                                        on d.ProductId equals p.ID.ToString() into tempTable
+                                   from product in tempTable.DefaultIfEmpty()
+                                   join o in _context.purchaseOrders
+                                        on d.PurchaseOrderId equals o.ID.ToString() into tempTable2
+                                   from order in tempTable2.DefaultIfEmpty()
                                    select new
                                    {
-                                       tempcustomer.ID,
-                                       tempcustomer.Quantity,
-                                       tempcustomer.TaxAmount,
-                                       tempcustomer.Price,
-                                       tempcustomer.DiscountAmount,
-                                       tempcustomer.TotalAmount,
-                                       leftJoinData.ProductName,
+                                       // dùng camelCase đúng với JS
+                                       id = d.ID,
+                                       quantity = d.Quantity,
+                                       taxAmount = d.TaxAmount,
+                                       price = d.Price,
+                                       discountAmount = d.DiscountAmount,
+                                       totalAmount = d.TotalAmount,
+                                       productName = product != null ? product.ProductName : ""
                                    };
 
-                var totalAmount = (double)customerData.Sum(x => x.TotalAmount);
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                // Tính tổng tiền hàng
+                double totalAmount = customerData.Sum(x => (double)x.totalAmount);
+
+                // Sort
+                if (!string.IsNullOrWhiteSpace(sortColumn) &&
+                    !string.IsNullOrWhiteSpace(sortColumnDirection))
                 {
-                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
-                }
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    customerData = customerData.Where(m => m.ProductName.Contains(searchValue));
+                    customerData = customerData.OrderBy($"{sortColumn} {sortColumnDirection}");
                 }
 
-                recordsTotal = customerData.Count();
-                int sttCounter = skip + 1;
+                // Search
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    customerData = customerData.Where(m => m.productName.Contains(searchValue));
+                }
+
+                var recordsTotal = customerData.Count();
+
                 var data = customerData.Skip(skip).Take(pageSize).ToList();
+
                 return Ok(new
                 {
                     draw,
-                    recordsTotal = recordsTotal,
+                    recordsTotal,
                     recordsFiltered = recordsTotal,
                     totalAmount,
                     data
                 });
-                //var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-                //return Ok(jsonData);
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw;
+                return StatusCode(500);
             }
         }
     }

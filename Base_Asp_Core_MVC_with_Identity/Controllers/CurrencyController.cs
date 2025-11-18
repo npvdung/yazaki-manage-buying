@@ -88,5 +88,29 @@ namespace MangagerBuyProduct.Controllers
             }
             return View(empobj);
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteAjax(Guid id)
+        {
+            try
+            {
+                var entity = await _context.Currency.FindAsync(id);
+                if (entity == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy loại tiền tệ." });
+                }
+
+                _context.Currency.Remove(entity);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Xoá loại tiền tệ thành công." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Xoá thất bại: " + ex.Message });
+            }
+        }
+
     }
 }

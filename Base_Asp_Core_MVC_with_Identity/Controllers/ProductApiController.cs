@@ -38,15 +38,12 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
                 var customerData = from tempcustomer in _context.Products
                                     join temps1 in _context.vendors on tempcustomer.VenderId equals temps1.ID.ToString() into tempTable1CD
                                     from tb1 in tempTable1CD.DefaultIfEmpty()
-                                    join temps2 in _context.manufactures on tempcustomer.ManufacturerId equals temps2.ID.ToString() into tempTable2
-                                   from tb2 in tempTable2.DefaultIfEmpty()
                                    select new
                                     {
                                         tempcustomer.ID,
                                         tempcustomer.ProductCode,
                                         tempcustomer.ProductName,
                                         venderName = tb1.VendorName,
-                                       manufacturerName = tb2.ManufactureName,
                                     };
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
@@ -67,7 +64,7 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                return StatusCode(500, new { error = ex.Message, stack = ex.StackTrace });
             }
         }
 

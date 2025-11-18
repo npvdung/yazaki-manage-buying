@@ -237,11 +237,11 @@
                 <p class="value">@Model.Sales%</p>
             </div>
             <div class="dashboard-card">
-                <h5>Số lượng đơn hàng </h5>
+                <h5>Tiền nhập hàng </h5>
                 <p class="value">@String.Format("{0:N0} VND", Model.Revenue)</p>
             </div>
             <div class="dashboard-card">
-                <h5>Số lượng trả lại</h5>
+                <h5>Tiền trả lại hàng</h5>
                 <p class="value">@String.Format("{0:N0} VND", Model.NewClients)</p>
             </div>
         </div>
@@ -294,7 +294,7 @@
             <!-- Biểu đồ -->
             <div class="chart-container">
                 <div class="chart-card">
-                    <h5 style="font-weight: 600;">Biểu đồ doanh thu</h5>
+                    <h5 style="font-weight: 600;">Biểu đồ lưu lượng nhập hàng</h5>
                     <canvas id="revenueChart"></canvas> <!-- Biểu đồ doanh thu -->
                 </div>
             </div>

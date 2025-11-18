@@ -34,14 +34,14 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         private void PopulateDropDowns(Product? model = null)
         {
             // 1. Manufacturer
-            ViewData["ManufacturerLst"] = _context.manufactures
-                .Select(m => new SelectListItem
-                {
-                    Text     = m.ManufactureName,
-                    Value    = m.ID.ToString(),
-                    Selected = (model != null && model.ManufacturerId == m.ID.ToString())
-                })
-                .ToList();
+            // ViewData["ManufacturerLst"] = _context.manufactures
+            //     .Select(m => new SelectListItem
+            //     {
+            //         Text     = m.ManufactureName,
+            //         Value    = m.ID.ToString(),
+            //         Selected = (model != null && model.ManufacturerId == m.ID.ToString())
+            //     })
+            //     .ToList();
 
             // 2. Vendor
             ViewData["VendorLst"] = _context.vendors
@@ -80,17 +80,17 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             product.Description = "không";
 
             // 1. Manufacturer
-            var manufacturers = _context.manufactures.ToList();
-            var manufacturerItems = new List<SelectListItem>();
-            foreach (var m in manufacturers)
-            {
-                manufacturerItems.Add(new SelectListItem
-                {
-                    Text  = m.ManufactureName,   // tên hiển thị
-                    Value = m.ID.ToString()      // giá trị lưu
-                });
-            }
-            ViewData["ManufacturerLst"] = manufacturerItems;
+            // var manufacturers = _context.manufactures.ToList();
+            // var manufacturerItems = new List<SelectListItem>();
+            // foreach (var m in manufacturers)
+            // {
+            //     manufacturerItems.Add(new SelectListItem
+            //     {
+            //         Text  = m.ManufactureName,   // tên hiển thị
+            //         Value = m.ID.ToString()      // giá trị lưu
+            //     });
+            // }
+            // ViewData["ManufacturerLst"] = manufacturerItems;
 
             // 2. Ingredient group
             // var ingredientGroups = _context.ingredientsGroups.ToList();
@@ -173,15 +173,15 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             }
 
             // 1. Manufacturer
-            var manufacturers = _context.manufactures.ToList()
-                .Select(m => new SelectListItem
-                {
-                    Text     = m.ManufactureName,
-                    Value    = m.ID.ToString(),
-                    Selected = m.ID.ToString() == product.ManufacturerId   // chọn sẵn
-                })
-                .ToList();
-            ViewData["ManufacturerLst"] = manufacturers;
+            // var manufacturers = _context.manufactures.ToList()
+            //     .Select(m => new SelectListItem
+            //     {
+            //         Text     = m.ManufactureName,
+            //         Value    = m.ID.ToString(),
+            //         Selected = m.ID.ToString() == product.ManufacturerId   // chọn sẵn
+            //     })
+            //     .ToList();
+            // ViewData["ManufacturerLst"] = manufacturers;
 
             // 2. Ingredient group
             // var ingredientGroups = _context.ingredientsGroups.ToList()
@@ -217,10 +217,10 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             ViewData["QuotaLst"] = categories;
 
             // Phần này giữ nguyên logic cũ của anh để fill mấy textbox readonly
-            var manu = _context.manufactures
-                            .FirstOrDefault(_ => _.ID.ToString() == product.ManufacturerId);
-            if (manu != null)
-                product.MANUFACTURER_Data = manu.ManufactureCode;
+            // var manu = _context.manufactures
+            //                 .FirstOrDefault(_ => _.ID.ToString() == product.ManufacturerId);
+            // if (manu != null)
+            //     product.MANUFACTURER_Data = manu.ManufactureCode;
 
             // var ing = _context.ingredientsGroups
             //                 .FirstOrDefault(_ => _.ID.ToString() == product.IngredientGroupId);
@@ -263,14 +263,14 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
                 TempData["ResultOk"] = "Cập nhập dữ liệu thành công !";
                 return RedirectToAction("Index");
             }
-            ViewData["ManufacturerLst"] = _context.manufactures.ToList()
-                .Select(m => new SelectListItem
-                {
-                    Text     = m.ManufactureName,
-                    Value    = m.ID.ToString(),
-                    Selected = m.ID.ToString() == empobj.ManufacturerId
-                })
-                .ToList();
+            // ViewData["ManufacturerLst"] = _context.manufactures.ToList()
+            //     .Select(m => new SelectListItem
+            //     {
+            //         Text     = m.ManufactureName,
+            //         Value    = m.ID.ToString(),
+            //         Selected = m.ID.ToString() == empobj.ManufacturerId
+            //     })
+            //     .ToList();
 
             // 3. Vendor
             ViewData["VendorLst"] = _context.vendors.Where(v => v.Status == 0).ToList()
@@ -299,14 +299,14 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         public IActionResult GetDataForDropdown(string id, string type)
         {
             // Kiểm tra loại dropdown để lấy dữ liệu
-            if (type == "Manufacturer")
-            {
-                var manufacturer = _context.manufactures.FirstOrDefault(m => m.ID.ToString() == id);
-                if (manufacturer != null)
-                {
-                    return Json(new { value = manufacturer.ManufactureCode });
-                }
-            }
+            // if (type == "Manufacturer")
+            // {
+            //     var manufacturer = _context.manufactures.FirstOrDefault(m => m.ID.ToString() == id);
+            //     if (manufacturer != null)
+            //     {
+            //         return Json(new { value = manufacturer.ManufactureCode });
+            //     }
+            // }
             // else if (type == "IngredientGroup")
             // {
             //     var category = _context.ingredientsGroups.FirstOrDefault(c => c.ID.ToString() == id);
@@ -315,7 +315,7 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             //         return Json(new { value = category.Content });
             //     }
             // }
-            else if (type == "Vendor")
+            if (type == "Vendor")
             {
                 var category = _context.vendors.FirstOrDefault(c => c.ID.ToString() == id);
                 var currency = _context.Currency.Where(_ => _.ID.ToString() == category.CurrencyId).FirstOrDefault();
@@ -326,6 +326,30 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             }
             return Json(new { value = "" });
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteAjax(Guid id)
+        {
+            try
+            {
+                var entity = await _context.Products.FindAsync(id);
+                if (entity == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy mặt hàng." });
+                }
+
+                _context.Products.Remove(entity);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Xoá mặt hàng thành công." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Xoá thất bại: " + ex.Message });
+            }
+        }
+
 
     }
 }

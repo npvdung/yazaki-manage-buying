@@ -30,13 +30,10 @@ namespace MangagerBuyProduct.Controllers
                 int recordsTotal = 0;
                 var customerData = (from tempcustomer in _context.Currency select tempcustomer);
 
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                if (!string.IsNullOrWhiteSpace(sortColumn) &&
+                    !string.IsNullOrWhiteSpace(sortColumnDirection))
                 {
-                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
-                }
-                if (!string.IsNullOrEmpty(searchValue))
-                {
-                    customerData = customerData.Where(m => m.CurrencyCode.Contains(searchValue) || m.CurrencyName.Contains(searchValue));
+                    customerData = customerData.OrderBy($"{sortColumn} {sortColumnDirection}");
                 }
 
                 recordsTotal = customerData.Count();

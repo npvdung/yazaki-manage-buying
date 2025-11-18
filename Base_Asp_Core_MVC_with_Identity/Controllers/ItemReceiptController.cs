@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 
 namespace MangagerBuyProduct.Controllers
@@ -17,16 +16,22 @@ namespace MangagerBuyProduct.Controllers
     public class ItemReceiptController : Controller
     {
         private readonly Base_Asp_Core_MVC_with_IdentityContext _context;
-        private UserManager<UserSystemIdentity> _userManager;
+        private readonly UserManager<UserSystemIdentity> _userManager;
         private readonly ICommonService _commonService;
         private readonly IAuditLogService _auditLogService;
-        public ItemReceiptController(Base_Asp_Core_MVC_with_IdentityContext context, UserManager<UserSystemIdentity> userManager, ICommonService commonService, IAuditLogService auditLogService)
+
+        public ItemReceiptController(
+            Base_Asp_Core_MVC_with_IdentityContext context,
+            UserManager<UserSystemIdentity> userManager,
+            ICommonService commonService,
+            IAuditLogService auditLogService)
         {
             _context = context;
             _userManager = userManager;
             _commonService = commonService;
             _auditLogService = auditLogService;
         }
+
         private void LoadDropdowns(string? selectedShipmentId = null, string? selectedStockId = null)
         {
             // 1. danh sách phiếu giao đang giao
@@ -34,26 +39,22 @@ namespace MangagerBuyProduct.Controllers
                 .Where(x => x.Status == EnumShip.ProcessShip.ToString())
                 .Select(x => new SelectListItem
                 {
-                    // hiển thị mã phiếu giao
                     Text = x.ShipmentRequestCode,
-                    // value là GUID để bind vào ItemReceipt.ShipmentRequestId
                     Value = x.ID.ToString(),
                     Selected = (selectedShipmentId != null && selectedShipmentId == x.ID.ToString())
                 })
                 .ToList();
-
             ViewData["shipmentRequestLst"] = shipmentList;
 
             // 2. danh sách kho
             var stockList = _context.inventory
                 .Select(x => new SelectListItem
                 {
-                    Text = x.Name,              // tên kho để hiển thị
-                    Value = x.ID.ToString(),    // GUID để lưu
+                    Text = x.Name,
+                    Value = x.ID.ToString(),
                     Selected = (selectedStockId != null && selectedStockId == x.ID.ToString())
                 })
                 .ToList();
-
             ViewData["stockLst"] = stockList;
 
             // 3. danh sách trạng thái nhập
@@ -65,15 +66,15 @@ namespace MangagerBuyProduct.Controllers
                     Value = ((int)e).ToString()
                 })
                 .ToList();
-
             ViewData["Statuslst"] = statusList;
         }
-
 
         public Base_Asp_Core_MVC_with_IdentityContext Get_context()
         {
             return _context;
         }
+
+        // ================== INDEX ==================
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
@@ -81,55 +82,84 @@ namespace MangagerBuyProduct.Controllers
             return View(objCatlist);
         }
 
+        // ================== CREATE (GET) ==================
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            var model = new ItemReceipt();
-            // nạp dropdown
+            var model = new ItemReceipt
+            {
+                Status = (int)EnumReceipt.Success
+            };
+
             LoadDropdowns();
-            // mặc định trạng thái
-            model.Status = (int)EnumReceipt.Success;
             return View(model);
         }
 
+        // ================== CREATE (POST) ==================
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(ItemReceipt empobj)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
             empobj.EmployeeId = user.Id;
 
             if (ModelState.IsValid)
             {
-                // --- phần save của bạn giữ nguyên ---
                 empobj.ID = Guid.NewGuid();
                 _context.ItemReceipt.Add(empobj);
                 _context.SaveChanges();
 
-                var temp = _context.shipmentRequests.Find(Guid.Parse(empobj.ShipmentRequestId));
-                temp.Status = EnumShip.DoneShip.ToString();
-                _context.Update(temp);
-                _context.SaveChanges();
-
-                var temp3 = _context.purchaseOrders.Find(Guid.Parse(temp.PurchaseOrderId));
-                temp3.Status = (int)EnumPurchaseOrder.DoneShip;
-                _context.Update(temp3);
-                _context.SaveChanges();
-
-                if (temp3.Status == (int)EnumPurchaseOrder.DoneShip)
+                // --- cập nhật ShipmentRequest ---
+                var shipment = _context.shipmentRequests
+                    .FirstOrDefault(x => x.ID.ToString() == empobj.ShipmentRequestId);
+                if (shipment != null)
                 {
-                    var tempList = _context.purchaseOrderDetails
-                                        .Where(x => x.PurchaseOrderId == temp3.ID.ToString())
-                                        .ToList();
-                    foreach (var item in tempList)
+                    shipment.Status = EnumShip.DoneShip.ToString();
+                    _context.shipmentRequests.Update(shipment);
+                    _context.SaveChanges();
+
+                    // --- cập nhật PurchaseOrder ---
+                    var po = _context.purchaseOrders
+                        .FirstOrDefault(x => x.ID.ToString() == shipment.PurchaseOrderId);
+
+                    if (po != null)
                     {
-                        var updateData = _context.quota
-                                                .Where(x => x.ProductId == item.ProductId)
-                                                .FirstOrDefault();
-                        updateData.UsedQuantity += (int)item.Quantity;
-                        _context.Update(updateData);
+                        po.Status = (int)EnumPurchaseOrder.DoneShip;
+                        _context.purchaseOrders.Update(po);
                         _context.SaveChanges();
+
+                        // --- cập nhật quota (NẾU CÓ) ---
+                        if (po.Status == (int)EnumPurchaseOrder.DoneShip)
+                        {
+                            var poDetails = _context.purchaseOrderDetails
+                                .Where(x => x.PurchaseOrderId == po.ID.ToString())
+                                .ToList();
+
+                            foreach (var item in poDetails)
+                            {
+                                var quotaRow = _context.quota
+                                    .FirstOrDefault(x => x.ProductId == item.ProductId);
+
+                                // Có quota thì mới cập nhật, không có thì bỏ qua
+                                if (quotaRow != null)
+                                {
+                                    quotaRow.UsedQuantity =
+                                        (quotaRow.UsedQuantity ?? 0) + (int)(item.Quantity ?? 0);
+
+                                    quotaRow.RemainingQuantity =
+                                        (quotaRow.RemainingQuantity ?? 0) - (int)(item.Quantity ?? 0);
+
+                                    _context.quota.Update(quotaRow);
+                                }
+                            }
+                            _context.SaveChanges();
+                        }
                     }
                 }
 
@@ -137,20 +167,18 @@ namespace MangagerBuyProduct.Controllers
                     userId: User.Identity.Name,
                     action: "Create",
                     tableName: "ItemReceipt",
-                    recordId: Guid.NewGuid().ToString(),
-                    changes: JsonConvert.SerializeObject("log")
-                );
+                    recordId: empobj.ID.ToString(),
+                    changes: JsonConvert.SerializeObject("log"));
 
                 TempData["ResultOk"] = "Tạo dữ liệu thành công !";
                 return RedirectToAction("Index");
             }
 
-            // ModelState lỗi → nạp lại dropdown + return view
             LoadDropdowns(empobj.ShipmentRequestId, empobj.StockId);
             return View(empobj);
         }
 
-        
+        // ================== EDIT (GET) ==================
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(Guid Id)
         {
@@ -160,26 +188,26 @@ namespace MangagerBuyProduct.Controllers
                 return NotFound();
             }
 
-            // nạp dropdown, chọn đúng giá trị đang có
             LoadDropdowns(empfromdb.ShipmentRequestId, empfromdb.StockId);
 
-            // phần lấy lại tiền từ hợp đồng của bạn giữ nguyên
+            // Lấy lại tiền dựa trên hợp đồng
             var ship = _context.shipmentRequests
-                            .FirstOrDefault(x => x.ID.ToString() == empfromdb.ShipmentRequestId);
+                .FirstOrDefault(x => x.ID.ToString() == empfromdb.ShipmentRequestId);
             if (ship != null)
             {
                 var po = _context.purchaseOrders
-                                .FirstOrDefault(v => v.ID.ToString() == ship.PurchaseOrderId);
+                    .FirstOrDefault(v => v.ID.ToString() == ship.PurchaseOrderId);
                 if (po != null)
                 {
                     var contract = _context.purchaseContracts
-                                        .FirstOrDefault(p => p.ID.ToString() == po.PurchaseContractId);
+                        .FirstOrDefault(p => p.ID.ToString() == po.PurchaseContractId);
                     if (contract != null)
                     {
-                        empfromdb.TotalAmount = Math.Round((decimal)contract.TotalAmount, 2);
-                        empfromdb.TotalAmountIncludeTax = Math.Round((decimal)contract.TotalAmountIncludeTax, 2);
-                        empfromdb.TotalDiscoutAmount = Math.Round((decimal)contract.TotalDiscoutAmount, 2);
-                        empfromdb.TotalAmountIncludeTaxAndDiscount = Math.Round((decimal)contract.TotalAmountIncludeTaxAndDiscount, 2);
+                        empfromdb.TotalAmount = Math.Round(contract.TotalAmount ?? 0m, 2);
+                        empfromdb.TotalAmountIncludeTax = Math.Round(contract.TotalAmountIncludeTax ?? 0m, 2);
+                        empfromdb.TotalDiscoutAmount = Math.Round(contract.TotalDiscoutAmount ?? 0m, 2);
+                        empfromdb.TotalAmountIncludeTaxAndDiscount =
+                            Math.Round(contract.TotalAmountIncludeTaxAndDiscount ?? 0m, 2);
                     }
                 }
             }
@@ -187,115 +215,135 @@ namespace MangagerBuyProduct.Controllers
             return View(empfromdb);
         }
 
-
+        // ================== EDIT (POST) ==================
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(ItemReceipt empobj)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
             empobj.EmployeeId = user.Id;
 
             if (ModelState.IsValid)
             {
                 _context.ItemReceipt.Update(empobj);
                 _context.SaveChanges();
+
                 await _auditLogService.LogAsync(
                     userId: User.Identity.Name,
-                    action: "Create",
+                    action: "Update",
                     tableName: "ItemReceipt",
-                    recordId: Guid.NewGuid().ToString(),
-                    changes: JsonConvert.SerializeObject("log")
-                );
+                    recordId: empobj.ID.ToString(),
+                    changes: JsonConvert.SerializeObject("log"));
+
                 TempData["ResultOk"] = "Cập nhập dữ liệu thành công !";
                 return RedirectToAction("Index");
             }
 
-            // lỗi → nạp lại cho view
             LoadDropdowns(empobj.ShipmentRequestId, empobj.StockId);
             return View(empobj);
         }
 
-
-
+        // ================== AJAX GET DATA ==================
         [HttpGet]
         public IActionResult GetDataForDropdown(string id, string type)
         {
-            // Kiểm tra loại dropdown để lấy dữ liệu
             if (type == "Manufacturer")
             {
-                //id này là id của ship
-                var tempItem = _context.shipmentRequests.Find(Guid.Parse(id));
-
-                // Tìm thông tin Vendor theo ID
-                var item = _context.purchaseOrders.FirstOrDefault(v => v.ID.ToString() == tempItem.PurchaseOrderId);
-                if (item == null)
+                // id: ID của shipment
+                if (!Guid.TryParse(id, out var shipId))
                 {
-                    return NotFound("Vendor not found");
+                    return BadRequest("Invalid shipment id");
                 }
 
-                // Lấy thông tin các sản phẩm liên quan đến Vendor
-                var Contract = _context.purchaseContracts
-                    .Where(p => p.ID.ToString() == item.PurchaseContractId)
-                    .FirstOrDefault();
+                var ship = _context.shipmentRequests.Find(shipId);
+                if (ship == null)
+                {
+                    return NotFound("Shipment not found");
+                }
 
-                // Tạo đối tượng trả về
+                var po = _context.purchaseOrders
+                    .FirstOrDefault(v => v.ID.ToString() == ship.PurchaseOrderId);
+                if (po == null)
+                {
+                    return NotFound("Purchase order not found");
+                }
+
+                var contract = _context.purchaseContracts
+                    .FirstOrDefault(p => p.ID.ToString() == po.PurchaseContractId);
+                if (contract == null)
+                {
+                    return NotFound("Purchase contract not found");
+                }
+
                 var result = new
                 {
-                    TotalAmount = Contract.TotalAmount, // Tên loại tiền tệ
-                    TotalAmountIncludeTax = Contract.TotalAmountIncludeTax,    // Địa chỉ Vendor
-                    TotalDiscoutAmount = Contract.TotalDiscoutAmount, // Người liên hệ
-                    TotalAmountIncludeTaxAndDiscount = Contract.TotalAmountIncludeTaxAndDiscount, // Điều khoản thanh toán
+                    TotalAmount = contract.TotalAmount,
+                    TotalAmountIncludeTax = contract.TotalAmountIncludeTax,
+                    TotalDiscoutAmount = contract.TotalDiscoutAmount,
+                    TotalAmountIncludeTaxAndDiscount = contract.TotalAmountIncludeTaxAndDiscount
                 };
 
                 return Json(result);
-
             }
 
             return Json(new { value = "" });
         }
-        
+
+        // ================== ITEMRECEIPT (GET) ==================
         [Authorize(Roles = "Admin")]
         public IActionResult ItemReceipt(Guid Id)
         {
-            if (Id == Guid.Empty)
+            var objItem = new ItemReceipt();
+
+            if (Id != Guid.Empty)
             {
-                // nếu không có Id thì vẫn cần dropdown rỗng
-                LoadDropdowns();
-                return View(new ItemReceipt());
+                objItem.ShipmentRequestId = Id.ToString();
+
+                var ship = _context.shipmentRequests.Find(Id);
+                if (ship != null)
+                {
+                    var po = _context.purchaseOrders
+                        .FirstOrDefault(v => v.ID.ToString() == ship.PurchaseOrderId);
+                    if (po != null)
+                    {
+                        var contract = _context.purchaseContracts
+                            .FirstOrDefault(v => v.ID.ToString() == po.PurchaseContractId);
+                        if (contract != null)
+                        {
+                            objItem.TotalAmount = Math.Round(contract.TotalAmount ?? 0m, 2);
+                            objItem.TotalDiscoutAmount = Math.Round(contract.TotalDiscoutAmount ?? 0m, 2);
+                            objItem.TotalAmountIncludeTaxAndDiscount =
+                                Math.Round(contract.TotalAmountIncludeTaxAndDiscount ?? 0m, 2);
+                            objItem.TotalAmountIncludeTax =
+                                Math.Round(contract.TotalAmountIncludeTax ?? 0m, 2);
+                        }
+                    }
+                }
             }
 
-            var objItem = new ItemReceipt
-            {
-                ShipmentRequestId = Id.ToString()
-            };
-
-            // phần lấy tiền giữ nguyên
-            var tempItem = _context.shipmentRequests.Find(Id);
-            if (tempItem != null)
-            {
-                var po = _context.purchaseOrders.FirstOrDefault(v => v.ID.ToString() == tempItem.PurchaseOrderId);
-                var contract = _context.purchaseContracts.FirstOrDefault(v => v.ID.ToString() == po.PurchaseContractId);
-
-                objItem.TotalAmount = Math.Round((decimal)contract.TotalAmount, 2);
-                objItem.TotalDiscoutAmount = Math.Round((decimal)contract.TotalDiscoutAmount, 2);
-                objItem.TotalAmountIncludeTaxAndDiscount = Math.Round((decimal)contract.TotalAmountIncludeTaxAndDiscount, 2);
-                objItem.TotalAmountIncludeTax = Math.Round((decimal)contract.TotalAmountIncludeTax, 2);
-            }
-
-            // nạp dropdown + chọn sẵn
-            LoadDropdowns(objItem.ShipmentRequestId, objItem.StockId);
             objItem.Status = (int)EnumReceipt.Success;
+            LoadDropdowns(objItem.ShipmentRequestId, objItem.StockId);
             return View(objItem);
         }
 
-
+        // ================== ITEMRECEIPT (POST) ==================
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ItemReceipt(ItemReceipt empobj)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
             empobj.EmployeeId = user.Id;
 
             if (ModelState.IsValid)
@@ -303,31 +351,55 @@ namespace MangagerBuyProduct.Controllers
                 empobj.ID = Guid.NewGuid();
                 _context.ItemReceipt.Add(empobj);
                 _context.SaveChanges();
-                var temp = _context.shipmentRequests.Find(Guid.Parse(empobj.ShipmentRequestId));
 
-                temp.Status = EnumShip.DoneShip.ToString();
-                _context.Update(temp);
-                _context.SaveChanges();
-
-                var temp3 = _context.purchaseOrders.Find(Guid.Parse(temp.PurchaseOrderId));
-                temp3.Status = (int)EnumPurchaseOrder.DoneShip;
-                _context.Update(temp3);
-                _context.SaveChanges();
-                if (temp3.Status == (int)EnumPurchaseOrder.DoneShip)
+                var ship = _context.shipmentRequests
+                    .FirstOrDefault(x => x.ID.ToString() == empobj.ShipmentRequestId);
+                if (ship != null)
                 {
-                    var tempList = _context.purchaseOrderDetails.Where(x => x.PurchaseOrderId == temp3.ID.ToString()).ToList();
-                    foreach (var item in tempList)
+                    ship.Status = EnumShip.DoneShip.ToString();
+                    _context.shipmentRequests.Update(ship);
+                    _context.SaveChanges();
+
+                    var po = _context.purchaseOrders
+                        .FirstOrDefault(x => x.ID.ToString() == ship.PurchaseOrderId);
+                    if (po != null)
                     {
-                        var updateData = _context.quota.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
-                        updateData.UsedQuantity += (int)item.Quantity;
-                        _context.Update(updateData);
+                        po.Status = (int)EnumPurchaseOrder.DoneShip;
+                        _context.purchaseOrders.Update(po);
                         _context.SaveChanges();
+
+                        if (po.Status == (int)EnumPurchaseOrder.DoneShip)
+                        {
+                            var poDetails = _context.purchaseOrderDetails
+                                .Where(x => x.PurchaseOrderId == po.ID.ToString())
+                                .ToList();
+
+                            foreach (var item in poDetails)
+                            {
+                                var quotaRow = _context.quota
+                                    .FirstOrDefault(x => x.ProductId == item.ProductId);
+
+                                if (quotaRow != null)
+                                {
+                                    quotaRow.UsedQuantity =
+                                        (quotaRow.UsedQuantity ?? 0) + (int)(item.Quantity ?? 0);
+
+                                    quotaRow.RemainingQuantity =
+                                        (quotaRow.RemainingQuantity ?? 0) - (int)(item.Quantity ?? 0);
+
+                                    _context.quota.Update(quotaRow);
+                                }
+                            }
+
+                            _context.SaveChanges();
+                        }
                     }
                 }
 
                 TempData["ResultOk"] = "Tạo dữ liệu thành công !";
                 return RedirectToAction("Index");
             }
+
             LoadDropdowns(empobj.ShipmentRequestId, empobj.StockId);
             return View(empobj);
         }

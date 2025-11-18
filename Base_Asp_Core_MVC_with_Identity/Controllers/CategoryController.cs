@@ -139,5 +139,29 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
             TempData["ResultOk"] = "Thông tin xoá thành công !";
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteAjax(Guid id)
+        {
+            try
+            {
+                var entity = await _context.Categories.FindAsync(id);
+                if (entity == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy loại vật tư." });
+                }
+
+                _context.Categories.Remove(entity);
+                await _context.SaveChangesAsync();
+
+                return Json(new { success = true, message = "Xoá loại vật tư thành công." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Xoá thất bại: " + ex.Message });
+            }
+        }
+
     }
 }

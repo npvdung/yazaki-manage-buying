@@ -16,3 +16,32 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#toast-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+}
+
+.custom-toast {
+  background-color: #28a745; /* xanh thành công */
+  color: #fff;
+  padding: 10px 16px;
+  margin-top: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease;
+}
+
+.custom-toast.error {
+  background-color: #dc3545; /* đỏ khi lỗi */
+}
+
+.custom-toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}

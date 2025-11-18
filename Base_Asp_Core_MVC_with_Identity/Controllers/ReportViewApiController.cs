@@ -26,75 +26,61 @@ namespace MangagerBuyProduct.Controllers
                 var sortColumn = Request.Query["columns[" + Request.Query["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDirection = Request.Query["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Query["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-                int recordsTotal = 0;
-                //var customerData = (from tempcustomer in _context.Categories select tempcustomer);
 
-                //var customerData = from tempcustomer in _context.purchaseOrderDetails
-                //                    join temp1 in _context.returnAuthorizations on tempcustomer.PurchaseOrderId equals temp1.PurchaseOrderId into tempTable
-                //                   from leftJoinData in tempTable.DefaultIfEmpty()
-                //                   //join temp2 in _context.purchaseOrderDetails on tempcustomer.PurchaseOrderId equals temp2.ID.ToString() into tempTable2
-                //                   //from leftJoinData2 in tempTable2.DefaultIfEmpty()
-                //                   join temp3 in _context.Products on tempcustomer.ProductId equals temp3.ID.ToString() into tempTable3
-                //                   from leftJoinData3 in tempTable3.DefaultIfEmpty()
-                //                   select new
-                //                   {
-                //                       tempcustomer.ID,
-                //                       tempcustomer.Quantity,
-                //                       tempcustomer.TaxAmount,
-                //                       tempcustomer.Price,
-                //                       tempcustomer.DiscountAmount,
-                //                       tempcustomer.TotalAmount,
-                //                       leftJoinData3.ProductName,
-                //                   };
+                int pageSize = !string.IsNullOrEmpty(length) ? Convert.ToInt32(length) : 0;
+                int skip = !string.IsNullOrEmpty(start) ? Convert.ToInt32(start) : 0;
 
-                var customerData = from tempcustomer in _context.purchaseOrderDetails
-                                   join temp1 in _context.returnAuthorizations
-                                   on tempcustomer.PurchaseOrderId equals temp1.PurchaseOrderId
-                                   join temp3 in _context.Products
-                                   on tempcustomer.ProductId equals temp3.ID.ToString()
-                                   select new
-                                   {
-                                       tempcustomer.ID,
-                                       tempcustomer.Quantity,
-                                       tempcustomer.TaxAmount,
-                                       tempcustomer.Price,
-                                       tempcustomer.DiscountAmount,
-                                       tempcustomer.TotalAmount,
-                                       temp3.ProductName
-                                   };
+                // Lấy các DÒNG ĐÃ TRẢ HÀNG:
+                // chi tiết đơn mua (purchaseOrderDetails) mà có ReturnAuthorization tương ứng,
+                // sau đó join với Products để lấy tên hàng.
+                var customerData = from d in _context.purchaseOrderDetails
+                                join r in _context.returnAuthorizations
+                                        on d.PurchaseOrderId equals r.PurchaseOrderId
+                                join p in _context.Products
+                                        on d.ProductId equals p.ID.ToString()
+                                select new
+                                {
+                                    id = d.ID,
+                                    quantity = d.Quantity,
+                                    taxAmount = d.TaxAmount,
+                                    price = d.Price,
+                                    discountAmount = d.DiscountAmount,
+                                    totalAmount = d.TotalAmount,
+                                    productName = p.ProductName
+                                };
 
+                double totalAmount = customerData.Sum(x => (double)x.totalAmount);
 
-                var totalAmount = (double)customerData.Sum(x => x.TotalAmount);
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                // Sort
+                if (!string.IsNullOrWhiteSpace(sortColumn) &&
+                    !string.IsNullOrWhiteSpace(sortColumnDirection))
                 {
-                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
+                    customerData = customerData.OrderBy($"{sortColumn} {sortColumnDirection}");
                 }
+
+                // Search theo tên hàng
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    customerData = customerData.Where(m => m.ProductName.Contains(searchValue));
+                    customerData = customerData.Where(m => m.productName.Contains(searchValue));
                 }
 
-                recordsTotal = customerData.Count();
-                int sttCounter = skip + 1;
+                var recordsTotal = customerData.Count();
                 var data = customerData.Skip(skip).Take(pageSize).ToList();
+
                 return Ok(new
                 {
                     draw,
-                    recordsTotal = recordsTotal,
+                    recordsTotal,
                     recordsFiltered = recordsTotal,
                     totalAmount,
                     data
                 });
-                //var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-                //return Ok(jsonData);
-
             }
-            catch (Exception ex)
+            catch
             {
-                throw;
+                return StatusCode(500);
             }
         }
+
     }
 }

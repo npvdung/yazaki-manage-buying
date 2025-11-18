@@ -29,7 +29,6 @@ public class Base_Asp_Core_MVC_with_IdentityContext : IdentityDbContext<UserSyst
     public DbSet<Currency> Currency { get; set; }
     public DbSet<IngredientsGroup> ingredientsGroups { get; set; }
     public DbSet<ItemReceipt> ItemReceipt { get; set; }
-    public DbSet<Manufacture> manufactures { get; set; }
     public DbSet<PurchaseContract> purchaseContracts { get; set; }
     public DbSet<PurchaseContractDetails> purchaseContractDetails { get; set; }
     public DbSet<PurchaseOrder> purchaseOrders { get; set; }

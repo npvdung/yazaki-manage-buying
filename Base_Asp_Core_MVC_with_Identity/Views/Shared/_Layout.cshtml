@@ -572,6 +572,38 @@
     </style>
 
 </head>
+<div id="toast-container"></div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+    <script>
+        function showToast(message, type) {
+            type = type || 'success';
+            var container = document.getElementById('toast-container');
+            if (!container) return;
+
+            var toast = document.createElement('div');
+            toast.className = 'custom-toast ' + (type === 'error' ? 'error' : '');
+            toast.innerText = message;
+
+            container.appendChild(toast);
+
+            // cho nó trượt vào
+            setTimeout(function () {
+                toast.classList.add('show');
+            }, 10);
+
+            // 3 giây sau thì biến mất
+            setTimeout(function () {
+                toast.classList.remove('show');
+                setTimeout(function () {
+                    container.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+}
+
 <body>
     <div class="navbar">
         <div class="navbar-left">
@@ -585,23 +617,25 @@
 
             <div class="navbar-item dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ||
                                              ViewContext.RouteData.Values["controller"]?.ToString() == "Vendor" ||
-                                             ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" ||
+                                             @* ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" || *@
                                              ViewContext.RouteData.Values["controller"]?.ToString() == "IngredientsGroup" ||
                                              ViewContext.RouteData.Values["controller"]?.ToString() == "Currency" ||
 ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ||
                                              ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")">
                 <a href="#"><i class="fas fa-cubes"></i> Danh sách <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
-                       asp-area="" asp-controller="Product" asp-action="Index">Mặt hàng</a>
-                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vendor" ? "active" : "")"
-                       asp-area="" asp-controller="Vendor" asp-action="Index">Nhà cung cấp</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
-                       asp-area="" asp-controller="Category" asp-action="Index">Loại vật tư</a>
+                        asp-area="" asp-controller="Category" asp-action="Index">Loại vật tư</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ? "active" : "")"
+                       asp-area="" asp-controller="Inventory" asp-action="Index">Kho</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Currency" ? "active" : "")"
                        asp-area="" asp-controller="Currency" asp-action="Index">Loại tiền tệ</a>
-                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" ? "active" : "")"
-                       asp-area="" asp-controller="Manufacture" asp-action="Index">Nhà sản xuất</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vendor" ? "active" : "")"
+                       asp-area="" asp-controller="Vendor" asp-action="Index">Nhà cung cấp</a>
+                    @* <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" ? "active" : "")"
+                       asp-area="" asp-controller="Manufacture" asp-action="Index">Nhà sản xuất</a> *@
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
+                       asp-area="" asp-controller="Product" asp-action="Index">Mặt hàng</a>
                     @* <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "IngredientsGroup" ? "active" : "")"
                        asp-area="" asp-controller="IngredientsGroup" asp-action="Index"> Thành phần</a> *@
                     <!-- Add similar conditions for other links -->
@@ -629,18 +663,16 @@ ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ||
                                     ViewContext.RouteData.Values["controller"]?.ToString() == "BillPayment" ? "active" : "")">
                 <a href="#"><i class="fas fa-shopping-cart"></i> Mua hàng <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Quota" ? "active" : "")"
+                    <a class="nav-link d-none text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Quota" ? "active" : "")"
                        asp-area="" asp-controller="Quota" asp-action="Index">Kế hoạch mua hàng</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "PurchaseContract" ? "active" : "")"
-                       asp-area="" asp-controller="PurchaseContract" asp-action="Index">Hợp đồng</a>
+                       asp-area="" asp-controller="PurchaseContract" asp-action="Index">Mua hàng</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "PurchaseOrder" ? "active" : "")"
                        asp-area="" asp-controller="PurchaseOrder" asp-action="Index">Đơn hàng</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "ShipmentRequest" ? "active" : "")"
                        asp-area="" asp-controller="ShipmentRequest" asp-action="Index">Yêu cầu giao hàng</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "ItemReceipt" ? "active" : "")"
                        asp-area="" asp-controller="ItemReceipt" asp-action="Index">Phiếu nhập kho</a>
-                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ? "active" : "")"
-                       asp-area="" asp-controller="Inventory" asp-action="Index">Kho</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "BillPayment" ? "active" : "")"
                        asp-area="" asp-controller="BillPayment" asp-action="Index">Hoá đơn</a>
                 </div>
