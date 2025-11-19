@@ -29,7 +29,9 @@ namespace MangagerBuyProduct.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<Inventory> objCatlist = _context.inventory;
+            IEnumerable<Inventory> objCatlist = _context.inventory
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
         [Authorize(Roles = "Admin")]

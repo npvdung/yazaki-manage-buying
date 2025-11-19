@@ -7,6 +7,8 @@ using Base_Asp_Core_MVC_with_Identity.Data;
 using MangagerBuyProduct.CommonFile.IServiceCommon;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
+using Rotativa.AspNetCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,5 +85,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
 
 app.Run();

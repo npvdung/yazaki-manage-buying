@@ -34,7 +34,9 @@ namespace MangagerBuyProduct.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<ReturnAuthorization> objCatlist = _context.returnAuthorizations;
+            IEnumerable<ReturnAuthorization> objCatlist = _context.returnAuthorizations
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
 

@@ -23,7 +23,9 @@ namespace MangagerBuyProduct.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<PurchaseContractDetails> objCatlist = _context.purchaseContractDetails;
+            IEnumerable<PurchaseContractDetails> objCatlist = _context.purchaseContractDetails
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
     }

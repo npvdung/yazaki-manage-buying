@@ -69,7 +69,9 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<Product> objCatlist = _context.Products;
+            var objCatlist = _context.Products
+                .OrderByDescending(x => x.ProductCode)
+                .ToList();
             return View(objCatlist);
         }
 

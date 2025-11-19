@@ -98,7 +98,9 @@ namespace MangagerBuyProduct.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<PurchaseContract> objCatlist = _context.purchaseContracts;
+            var objCatlist = _context.purchaseContracts
+                .OrderByDescending(x => x.PurchaseContractCode)
+                .ToList();
             return View(objCatlist);
         }
 

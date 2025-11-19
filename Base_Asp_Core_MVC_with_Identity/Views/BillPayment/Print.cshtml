@@ -1,0 +1,139 @@
+@model MangagerBuyProduct.Models.View.BillPaymentPrintView
+@{
+    Layout = null;  // để PDF không kéo theo layout chung
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@Model.BillPaymentCode</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+        }
+        h2, h3 {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 16px;
+            margin-bottom: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 6px 8px;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .no-border {
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+    <h2>HÓA ĐƠN THANH TOÁN</h2>
+    <h3>@Model.BillPaymentCode</h3>
+    <br />
+
+    <div>
+        <div class="section-title">Thông tin các bên</div>
+        <table>
+            <tr>
+                <td><strong>Bên A:</strong></td>
+                <td>@Model.CompanyAName</td>
+            </tr>
+            <tr>
+                <td><strong>Bên B:</strong></td>
+                <td>
+                    @Model.VendorName<br />
+                    @if (!string.IsNullOrEmpty(Model.VendorAddress))
+                    {
+                        <span>Địa chỉ: @Model.VendorAddress</span><br />
+                    }
+                    @if (!string.IsNullOrEmpty(Model.VendorPhone))
+                    {
+                        <span>Điện thoại: @Model.VendorPhone</span>
+                    }
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <div class="section-title">Thông tin hóa đơn</div>
+        <table>
+            <tr>
+                <td><strong>Mã hóa đơn:</strong></td>
+                <td>@Model.BillPaymentCode</td>
+                <td><strong>Ngày thanh toán:</strong></td>
+                <td>@Model.BillPaymentDate.ToString("dd/MM/yyyy")</td>
+            </tr>
+            <tr>
+                <td><strong>Phiếu nhập kho:</strong></td>
+                <td>@Model.ShipmentCode</td>
+                <td><strong>Kho:</strong></td>
+                <td>@Model.StockName</td>
+            </tr>
+            <tr>
+                <td><strong>Điều khoản thanh toán:</strong></td>
+                <td colspan="3">@Model.PaymentTerm</td>
+            </tr>
+            <tr>
+                <td><strong>Trạng thái:</strong></td>
+                <td colspan="3">@Model.StatusText</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <div class="section-title">Giá trị thanh toán</div>
+        <table>
+            <tr>
+                <th>Mục</th>
+                <th class="text-right">Số tiền (VND)</th>
+            </tr>
+            <tr>
+                <td>Tổng tiền phải thanh toán</td>
+                <td class="text-right">
+                    @Model.TotalAmount.ToString("N0")
+                </td>
+            </tr>
+            <tr>
+                <td>Số tiền đã thanh toán</td>
+                <td class="text-right">
+                    @Model.BillPaymentAmount.ToString("N0")
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <br /><br />
+    <table class="no-border" style="width:100%; border:none;">
+        <tr class="no-border">
+            <td class="no-border text-center">
+                <strong>ĐẠI DIỆN BÊN A</strong><br />
+                (Ký, ghi rõ họ tên)
+            </td>
+            <td class="no-border text-center">
+                <strong>ĐẠI DIỆN BÊN B</strong><br />
+                (Ký, ghi rõ họ tên)
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

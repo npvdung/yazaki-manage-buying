@@ -37,7 +37,9 @@ namespace MangagerBuyProduct.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<PurchaseOrder> objCatlist = _context.purchaseOrders;
+            IEnumerable<PurchaseOrder> objCatlist = _context.purchaseOrders
+                .OrderByDescending(x => x.PurchaseOrderCode)
+                .ToList();
             return View(objCatlist);
         }
 

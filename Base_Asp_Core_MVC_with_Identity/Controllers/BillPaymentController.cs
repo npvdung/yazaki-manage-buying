@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.Data;
 using System.Linq.Expressions;
+using MangagerBuyProduct.Models.View;   // dùng BillPaymentPrintView
+using Rotativa.AspNetCore;              // dùng ViewAsPdf
+
 
 namespace MangagerBuyProduct.Controllers
 {
@@ -36,7 +39,9 @@ namespace MangagerBuyProduct.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<BillPayment> objCatlist = _context.BillPayment;
+            IEnumerable<BillPayment> objCatlist = _context.BillPayment
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
 
@@ -361,5 +366,94 @@ namespace MangagerBuyProduct.Controllers
             TempData["ResultOk"] = "Tạo dữ liệu thành công!";
             return RedirectToAction(nameof(Index));
         }
+         
+        // ================== IN HÓA ĐƠN (PDF) ==================
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Print(Guid id)
+        {
+            // 1. Lấy bản ghi BillPayment
+            var bill = await _context.BillPayment.FindAsync(id);
+            if (bill == null)
+            {
+                return NotFound();
+            }
+
+            // 2. Lấy chuỗi liên quan: ItemReceipt -> ShipmentRequest -> PurchaseOrder -> PurchaseContract -> Vendor
+            var itemReceipt = _context.ItemReceipt
+                .FirstOrDefault(x => x.ID.ToString() == bill.ItemReceiptId);
+
+            ShipmentRequest?   shipment      = null;
+            PurchaseOrder?     purchaseOrder = null;
+            PurchaseContract?  contract      = null;
+            Vendor?            vendor        = null;
+            Inventory?         stock         = null;
+
+            if (itemReceipt != null)
+            {
+                shipment = _context.shipmentRequests
+                    .FirstOrDefault(x => x.ID.ToString() == itemReceipt.ShipmentRequestId);
+
+                if (!string.IsNullOrEmpty(itemReceipt.StockId))
+                {
+                    stock = _context.inventory
+                        .FirstOrDefault(x => x.ID.ToString() == itemReceipt.StockId);
+                }
+            }
+
+            if (shipment != null)
+            {
+                purchaseOrder = _context.purchaseOrders
+                    .FirstOrDefault(x => x.ID.ToString() == shipment.PurchaseOrderId);
+            }
+
+            if (purchaseOrder != null)
+            {
+                contract = _context.purchaseContracts
+                    .FirstOrDefault(x => x.ID.ToString() == purchaseOrder.PurchaseContractId);
+            }
+
+            if (contract != null && !string.IsNullOrEmpty(contract.VenderId))
+            {
+                vendor = _context.vendors
+                    .FirstOrDefault(x => x.ID.ToString() == contract.VenderId);
+            }
+
+            // 3. Text trạng thái
+            string statusText = string.Empty;
+            if (bill.Status.HasValue)
+            {
+                var statusEnum = (EnumReceipt)bill.Status.Value;
+                statusText = statusEnum.GetDisplayName();
+            }
+
+            // 4. Map sang ViewModel để in
+            var model = new BillPaymentPrintView
+            {
+                BillPaymentCode   = bill.BillPaymentCode,
+                BillPaymentDate   = bill.BillPaymentDate ?? DateTime.Now,
+                TotalAmount       = bill.TotalAmount ?? 0m,
+                BillPaymentAmount = bill.BillPaymentAmount ?? 0m,
+                PaymentTerm       = bill.PaymentTerm,
+                StatusText        = statusText,
+
+                ShipmentCode      = shipment?.ShipmentRequestCode,
+                StockName         = stock?.Name,
+
+                VendorName        = vendor?.VendorName,
+                VendorAddress     = vendor?.Address,
+                VendorPhone       = vendor?.Phone,
+
+                // BÊN A cố định là Yazaki
+                CompanyAName      = "Công ty cổ phần YAZAKI"
+            };
+
+            // 5. Trả về PDF
+            return new ViewAsPdf("Print", model)
+            {
+                FileName = $"{bill.BillPaymentCode}.pdf"
+            };
+        }
+
+
     }
 }

@@ -60,7 +60,10 @@ namespace MangagerBuyProduct.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<ShipmentRequest> objCatlist = _context.shipmentRequests;
+            IEnumerable<ShipmentRequest> objCatlist = _context.shipmentRequests
+                .OrderByDescending(x => x.ID)
+                .ToList();
+
             return View(objCatlist);
         }
 

@@ -51,7 +51,6 @@ namespace MangagerBuyProduct.Models.View
         [NotMapped]
         [Display(Name = "Tiền tệ")]
         public string? CurrencyName { get; set; }
-
         [Display(Name = "Chi tiết hợp đồng")]
         public List<PurchaseContractDetails> PurchaseContractDetails { get; set; } 
     }

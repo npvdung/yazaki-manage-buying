@@ -28,7 +28,9 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            IEnumerable<Supplier> objCatlist = _context.suppliers;
+            IEnumerable<Supplier> objCatlist = _context.suppliers
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
 

@@ -29,7 +29,9 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Return_Product> objCatlist = _context.ReturnProducts;
+            IEnumerable<Return_Product> objCatlist = _context.ReturnProducts
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
 

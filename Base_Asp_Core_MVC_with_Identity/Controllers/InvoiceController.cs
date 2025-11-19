@@ -30,7 +30,9 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Invoice> objCatlist = _context.Invoices;
+            IEnumerable<Invoice> objCatlist = _context.Invoices
+                .OrderByDescending(x => x.ID)
+                .ToList();
             return View(objCatlist);
         }
         [Authorize(Roles = "Admin")]

@@ -1,6 +1,8 @@
 ﻿using Base_Asp_Core_MVC_with_Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 
 namespace MangagerBuyProduct.Controllers
 {
@@ -16,54 +18,63 @@ namespace MangagerBuyProduct.Controllers
             _uid = uid;
             _context = context;
         }
+
         public IActionResult Index()
         {
             try
             {
-                //isAdmin = User.IsInRole(Roles.Admin.ToString()) ? true : false;
-                //isDoctor = User.IsInRole(Roles.Doctor.ToString()) ? true : false;
-                //isParent = User.IsInRole(Roles.Parent.ToString()) ? true : false;
-                //idUser = _uid.GetUserId(HttpContext.User);
-
-                var draw = Request.Query["draw"].FirstOrDefault();
-                var start = Request.Query["start"].FirstOrDefault();
-                var length = Request.Query["length"].FirstOrDefault();
-                var sortColumn = Request.Query["columns[" + Request.Query["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDirection = Request.Query["order[0][dir]"].FirstOrDefault();
+                var draw        = Request.Query["draw"].FirstOrDefault();
+                var start       = Request.Query["start"].FirstOrDefault();
+                var length      = Request.Query["length"].FirstOrDefault();
                 var searchValue = Request.Query["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-                int recordsTotal = 0;
-                //var customerData = (from tempcustomer in _context.purchaseOrders select tempcustomer);
 
-                var customerData = from tempcustomer in _context.purchaseOrders
-                                   join temp1 in _context.purchaseContracts on tempcustomer.PurchaseContractId equals temp1.ID.ToString() into tempTable
-                                   from leftJoinData in tempTable.DefaultIfEmpty()
-                                   select new
-                                   {
-                                       // Chọn các trường từ bảng Childrens và OtherTable
-                                       tempcustomer.ID,
-                                       tempcustomer.PurchaseOrderCode,
-                                       purchaseContractName = leftJoinData.PurchaseContractName,
-                                       tempcustomer.Status
-                                   };
-                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-                {
-                    customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
-                }
+                int pageSize = !string.IsNullOrEmpty(length) ? Convert.ToInt32(length) : 0;
+                int skip     = !string.IsNullOrEmpty(start)  ? Convert.ToInt32(start)  : 0;
+                int recordsTotal = 0;
+
+                var customerData =
+                    from tempcustomer in _context.purchaseOrders
+                    join temp1 in _context.purchaseContracts
+                        on tempcustomer.PurchaseContractId equals temp1.ID.ToString() into tempTable
+                    from leftJoinData in tempTable.DefaultIfEmpty()
+                    select new
+                    {
+                        tempcustomer.ID,
+                        tempcustomer.PurchaseOrderCode,
+                        purchaseContractName = leftJoinData != null ? leftJoinData.PurchaseContractName : string.Empty,
+                        tempcustomer.Status
+                    };
+
+                // filter theo search box
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    customerData = customerData.Where(m => m.PurchaseOrderCode.Contains(searchValue));
+                    customerData = customerData.Where(m =>
+                        m.PurchaseOrderCode.Contains(searchValue) ||
+                        m.purchaseContractName.Contains(searchValue));
                 }
 
-                recordsTotal = customerData.Count();
-                int sttCounter = skip + 1;
-                var data = customerData.Skip(skip).Take(pageSize).ToList();
-                var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-                return Ok(jsonData);
+                // LUÔN sắp xếp mới → cũ theo mã đơn hàng
+                customerData = customerData
+                    .OrderByDescending(m => m.PurchaseOrderCode);
 
+                recordsTotal = customerData.Count();
+
+                var data = customerData
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToList();
+
+                var jsonData = new
+                {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = data
+                };
+
+                return Ok(jsonData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

@@ -193,6 +193,11 @@
             padding: 0; /* Bỏ đệm */
         }
 
+        #historyPanel {
+            display: none !important;
+        }
+
+
         .history-list li {
             padding: 5px 0; /* Khoảng đệm cho từng mục */
             border-bottom: 1px solid #ddd; /* Đường viền dưới mỗi mục */
@@ -248,7 +253,7 @@
 
         <!-- Dashboard Row -->
         <div class="dashboard-row d-flex">
-            <div class="history-list b-600">
+            <div id="historyPanel" class="history-list b-600">
                 <h5 style="font-weight: 600;">Lịch sử</h5>
                 <table class="table table-bordered">
                     <thead>
