@@ -26,12 +26,13 @@
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
-          var id = row.id;
-          return `
-                        <a href="/BillPayment/Print/${id}" 
-                           class="btn btn-sm btn-outline-secondary">
-                            <i class="fa fa-print"></i> In
-                        </a>`;
+          //   var id = row.id;
+          return "&nbsp;";
+          //   return `
+          //                 <a href="/BillPayment/Print/${id}"
+          //                    class="btn btn-sm btn-outline-secondary">
+          //                     <i class="fa fa-print"></i> In
+          //                 </a>`;
         },
       },
 
