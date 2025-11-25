@@ -43,22 +43,33 @@
 
     public enum EnumPurchaseContract
     {
+        [Display(Name = "Chờ duyệt")]
         Wait,
+        [Display(Name = "Đã duyệt")]
         Approved,
+        [Display(Name = "Hoàn thành")]
         Done,
+        [Display(Name = "Đã huỷ")]
         Cancel
     }
     public enum EnumPurchaseOrder
     {
+        [Display(Name = "Chờ ship")]
         WaitShip,
+        [Display(Name = "Đang ship")]
         ProcessShip,
+        [Display(Name = "Đã ship")]
         DoneShip,
+        [Display(Name = "Huỷ ship")]
         CancelShip,
     }
     public enum EnumShip
     {
+        [Display(Name = "Đang ship")]
         ProcessShip,
+        [Display(Name = "Đã ship")]
         DoneShip,
+        [Display(Name = "Huỷ ship")]
         CancelShip,
     }
     public enum EnumReceipt

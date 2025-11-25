@@ -32,8 +32,8 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "Số tiền thanh toán")]
         public decimal? BillPaymentAmount { get; set; }
 
-        [Required(ErrorMessage = "Điều khoản thanh toán là bắt buộc.")]
-        [Display(Name = "Điều khoản thanh toán")]
+        [Required(ErrorMessage = "Hình thức thanh toán là bắt buộc.")]
+        [Display(Name = "Hình thức thanh toán")]
         public string? PaymentTerm { get; set; }
 
         [Required(ErrorMessage = "Trạng thái là bắt buộc.")]

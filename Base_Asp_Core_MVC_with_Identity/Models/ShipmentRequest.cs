@@ -19,14 +19,13 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         public string? EmplouyeeId { get; set; }
 
         [Required]
-        [Display(Name = "Loại giao hàng")]
+        [Display(Name = "Dịch vụ giao hàng")]
         public string? ShipmentRequestType { get; set; }
 
         [Required]
         [Display(Name = "Trạng thái")]
         public string? Status { get; set; }
 
-        [Required]
         [Display(Name = "Phương thức giao")]
         public string? Method { get; set; }
 
@@ -34,7 +33,6 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "Địa chỉ giao")]
         public string? Address { get; set; }
 
-        [Required]
         [Display(Name = "Người giao")]
         public string? DelyveryPersonName { get; set; }
 
@@ -42,7 +40,6 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "SĐT người giao")]
         public string? DelyveryPersonPhone { get; set; }
 
-        [Required]
         [Display(Name = "Ghi chú")]
         public string? Note { get; set; }
 
@@ -62,7 +59,6 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "Số tiền")]
         public decimal? Amount { get; set; }
 
-        [Required]
         [Display(Name = "Số tiền giảm")]
         public decimal? DiscountAmout { get; set; }
 

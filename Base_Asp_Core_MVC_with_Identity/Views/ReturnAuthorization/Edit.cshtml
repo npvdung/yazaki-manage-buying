@@ -171,7 +171,7 @@
                     <input type="text" class="form-control mb-3 col-md-8" asp-for="Address" placeholder="Nhập tên danh mục">
                     <span asp-validation-for="Address" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(model => model.DelyveryPersonName, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8" asp-for="DelyveryPersonName" placeholder="Nhập tên danh mục">
                     <span asp-validation-for="DelyveryPersonName" class="alert-danger"></span>

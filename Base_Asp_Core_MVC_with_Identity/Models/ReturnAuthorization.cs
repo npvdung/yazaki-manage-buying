@@ -16,14 +16,13 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         public string PurchaseOrderId { get; set; }
 
         [Required]
-        [Display(Name = "Phương thức vận chuyển")]
+        [Display(Name = "Dịch vụ giao hàng")]
         public string? ShipingMethod { get; set; }
 
         [Required]
         [Display(Name = "Địa chỉ")]
         public string? Address { get; set; }
 
-        [Required]
         [Display(Name = "Người giao")]
         public string? DelyveryPersonName { get; set; }
 
@@ -31,7 +30,6 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "SĐT người giao")]
         public string? DelyveryPersonPhone { get; set; }
 
-        [Required]
         [Display(Name = "Ghi chú")]
         public string? Note { get; set; }
 
