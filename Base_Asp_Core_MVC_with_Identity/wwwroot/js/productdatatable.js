@@ -17,10 +17,11 @@
       },
     ],
     columns: [
+      // 0. Id (ẩn)
       { data: "id", name: "Id", autoWidth: true },
 
+      // 1. Action View | Edit
       {
-        targets: 1,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
@@ -32,6 +33,7 @@
         },
       },
 
+      // 2. STT
       {
         data: null,
         name: "STT",
@@ -44,11 +46,19 @@
         },
       },
 
+      // 3. Mã hàng hoá
       { data: "productCode", name: "productCode", autoWidth: true },
+
+      // 4. Tên hàng hoá
       { data: "productName", name: "productName", autoWidth: true },
+
+      // 5. Đơn vị  (tên field JSON là "units")
+      { data: "units", name: "Units", autoWidth: true },
+
+      // 6. Nhà cung cấp
       { data: "venderName", name: "venderName", autoWidth: true },
 
-      // CỘT ICON XOÁ
+      // 7. Cột icon xoá
       {
         data: null,
         orderable: false,
@@ -56,12 +66,12 @@
         width: "40px",
         render: function (data, type, row) {
           return `
-                        <a href="javascript:void(0);"
-                           class="text-danger btn-delete"
-                           data-id="${row.id}"
-                           title="Xoá">
-                            <i class="fa fa-trash"></i>
-                        </a>`;
+            <a href="javascript:void(0);"
+               class="text-danger btn-delete"
+               data-id="${row.id}"
+               title="Xoá">
+                <i class="fa fa-trash"></i>
+            </a>`;
         },
       },
     ],
@@ -72,6 +82,7 @@
     pageLength: 5,
   });
 
+  // Xử lý xoá
   $("#customerDatatable").on("click", ".btn-delete", function () {
     var id = $(this).data("id");
 

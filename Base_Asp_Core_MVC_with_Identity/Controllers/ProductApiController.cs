@@ -21,54 +21,60 @@ namespace Base_Asp_Core_MVC_with_Identity.Controllers
         {
             try
             {
-                //isAdmin = User.IsInRole(Roles.Admin.ToString()) ? true : false;
-                //isDoctor = User.IsInRole(Roles.Doctor.ToString()) ? true : false;
-                //isParent = User.IsInRole(Roles.Parent.ToString()) ? true : false;
-                //idUser = _uid.GetUserId(HttpContext.User);
-
                 var draw = Request.Query["draw"].FirstOrDefault();
                 var start = Request.Query["start"].FirstOrDefault();
                 var length = Request.Query["length"].FirstOrDefault();
                 var sortColumn = Request.Query["columns[" + Request.Query["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
                 var sortColumnDirection = Request.Query["order[0][dir]"].FirstOrDefault();
                 var searchValue = Request.Query["search[value]"].FirstOrDefault();
+
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
-                var customerData = from tempcustomer in _context.Products
-                                    join temps1 in _context.vendors on tempcustomer.VenderId equals temps1.ID.ToString() into tempTable1CD
-                                    from tb1 in tempTable1CD.DefaultIfEmpty()
-                                   select new
-                                    {
-                                        tempcustomer.ID,
-                                        tempcustomer.ProductCode,
-                                        tempcustomer.ProductName,
-                                        venderName = tb1.VendorName,
-                                    };
+
+                var customerData =
+                    from tempcustomer in _context.Products
+                    join temps1 in _context.vendors
+                        on tempcustomer.VenderId equals temps1.ID.ToString() into tempTable1CD
+                    from tb1 in tempTable1CD.DefaultIfEmpty()
+                    select new
+                    {
+                        tempcustomer.ID,
+                        tempcustomer.ProductCode,
+                        tempcustomer.ProductName,
+                        tempcustomer.Units,            // <<-- CỘT ĐƠN VỊ
+                        venderName = tb1.VendorName,
+                    };
 
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 {
                     customerData = customerData.OrderBy(sortColumn + " " + sortColumnDirection);
                 }
+
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    customerData = customerData.Where(m => m.ProductCode.Contains(searchValue) || m.ProductName.Contains(searchValue));
+                    customerData = customerData.Where(m =>
+                        m.ProductCode.Contains(searchValue) ||
+                        m.ProductName.Contains(searchValue));
                 }
 
                 recordsTotal = customerData.Count();
-                int sttCounter = skip + 1;
                 var data = customerData.Skip(skip).Take(pageSize).ToList();
-                var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-                return Ok(jsonData);
 
+                var jsonData = new
+                {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = data
+                };
+
+                return Ok(jsonData);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = ex.Message, stack = ex.StackTrace });
             }
         }
-
-       
-
     }
 }
