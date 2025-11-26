@@ -3,6 +3,7 @@ using System;
 using Base_Asp_Core_MVC_with_Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MangagerBuyProduct.Migrations
 {
     [DbContext(typeof(Base_Asp_Core_MVC_with_IdentityContext))]
-    partial class Base_Asp_Core_MVC_with_IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20251126155354_NotRequire")]
+    partial class NotRequire
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace MangagerBuyProduct.Migrations
                     b.Property<DateTime?>("BirthDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasDefaultValue(new DateTime(2025, 11, 27, 0, 14, 7, 419, DateTimeKind.Local).AddTicks(2990));
+                        .HasDefaultValue(new DateTime(2025, 11, 26, 22, 53, 54, 152, DateTimeKind.Local).AddTicks(3850));
 
                     b.Property<string>("Code")
                         .HasMaxLength(128)
@@ -123,7 +125,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<decimal?>("BillPaymentAmount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("BillPaymentCode")
                         .IsRequired()
@@ -150,7 +152,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("TotalAmount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("ID");
 
@@ -392,7 +394,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -425,7 +427,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -435,7 +437,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<int>("Unit")
                         .HasColumnType("int");
@@ -540,13 +542,13 @@ namespace MangagerBuyProduct.Migrations
 
                     b.Property<decimal?>("TotalAmount")
                         .IsRequired()
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal?>("TotalAmountIncludeTax")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal?>("TotalAmountIncludeTaxAndDiscount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<decimal?>("TotalDiscoutAmount")
                         .HasColumnType("decimal(65,30)");
@@ -574,7 +576,7 @@ namespace MangagerBuyProduct.Migrations
 
                     b.Property<decimal?>("Price")
                         .IsRequired()
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -593,7 +595,7 @@ namespace MangagerBuyProduct.Migrations
 
                     b.Property<decimal?>("TotalAmount")
                         .IsRequired()
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("ID");
 
@@ -640,7 +642,7 @@ namespace MangagerBuyProduct.Migrations
 
                     b.Property<decimal?>("Price")
                         .IsRequired()
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -659,7 +661,7 @@ namespace MangagerBuyProduct.Migrations
 
                     b.Property<decimal?>("TotalAmount")
                         .IsRequired()
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("ID");
 
@@ -744,7 +746,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -770,7 +772,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -800,7 +802,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal?>("AmountReturn")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime?>("DateShip")
                         .HasColumnType("datetime(6)");
@@ -846,7 +848,7 @@ namespace MangagerBuyProduct.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(18,0)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<DateTime?>("DateShip")
                         .HasColumnType("datetime(6)");

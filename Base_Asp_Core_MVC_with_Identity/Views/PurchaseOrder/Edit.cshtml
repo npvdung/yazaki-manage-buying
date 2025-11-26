@@ -44,13 +44,13 @@
     <form method="post">
         <div class="flex">
             <div class="div-right">
-                <h2>Information PurchaseOrder</h2>
+                <h2>Thông tin đặt hàng</h2>
             </div>
         </div>
 
         <!-- Master Information -->
         <div class="form-section">
-            <div class="section-title">Order Master</div>
+            <div class="section-title">Thông tin chung</div>
             <div class="row">
                 <div class="form-group col-md-6">
                     @Html.LabelFor(m => m.PurchaseOrderCode)
@@ -73,7 +73,7 @@
                     @Html.DropDownListFor(
                         model => model.PurchaseContractId,
                         contractList,
-                        "Choose PurchaseContract",
+                        "Chọn mã hợp đồng ",
                         new {
                             @class = "form-control col-md-8 dynamic-dropdown",
                             data_type = "Manufacturer",
@@ -88,7 +88,7 @@
                     @Html.DropDownListFor(
                         model => model.Status,
                         statusList,
-                        "Choose Status",
+                        "Chọn trạng thái",
                         new { @id = "supplier", @class = "form-control col-md-4" }
                     )
                     <span asp-validation-for="Status" class="alert-danger"></span>
@@ -98,15 +98,15 @@
                     @Html.LabelFor(m => m.TotalAmount)
                     <input type="number" class="form-control" id="TotalAmount" asp-for="TotalAmount" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalDiscoutAmount)
                     <input type="number" class="form-control" id="TotalDiscoutAmount" asp-for="TotalDiscoutAmount" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTax)
                     <input type="number" class="form-control" id="TotalAmountIncludeTax" asp-for="TotalAmountIncludeTax" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
                     <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount" asp-for="TotalAmountIncludeTaxAndDiscount" step="0.01" />
                 </div>
@@ -115,7 +115,7 @@
 
         <!-- Detail Information -->
         <div class="form-section">
-            <div class="section-title">Order Details</div>
+            <div class="section-title">Chi tiết đơn hàng</div>
             <div id="details-container">
                 @for (int i = 0; i < details.Count; i++)
                 {
@@ -125,7 +125,7 @@
                             @Html.DropDownListFor(
                                 m => m.PurchaseOrderDetails[i].ProductId,
                                 productList,
-                                "Choose Product",
+                                "Chọn sản phẩm",
                                 new { @class = "form-control" }
                             )
                         </div>

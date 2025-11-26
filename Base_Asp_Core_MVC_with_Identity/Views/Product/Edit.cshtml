@@ -126,7 +126,7 @@
             </div>
             <div class="form-buttons div-left">
                 <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
-                <a href="#" class="btn btn-cancel">Cancel</a>
+                <a href="/Product" class="btn btn-cancel">Cancel</a>
             </div>
         </div>
 
@@ -161,7 +161,7 @@
                     @Html.DropDownListFor(
                         model => model.QuotaId,
                         (IEnumerable<SelectListItem>)ViewData["QuotaLst"],
-                        "Choose Category",
+                        "Chọn loại vật tư",
                         new { @id = "supplier", @class = "form-control col-md-4" }
                     )
                     <span asp-validation-for="QuotaId" class="alert-danger"></span>
@@ -174,41 +174,14 @@
             <div class="section-title">Chi tiết</div>
             <div class="row">
                 <!-- 2) SỬA CHỖ NÀY: Manufacturer -->
-                @* <div class="form-group col-md-6">
-                    @Html.LabelFor(model => model.ManufacturerId, new { @class = "control-label col-md-4" })
-                    @Html.DropDownListFor(
-                        model => model.ManufacturerId,
-                        (IEnumerable<SelectListItem>)ViewData["ManufacturerLst"],
-                        "Choose Manufacturer",
-                        new {
-                            @class = "form-control col-md-8 dynamic-dropdown",
-                            data_type = "Manufacturer",
-                            data_target = "#manufacturerCode"
-                        }
-                    )
-                    <span asp-validation-for="ManufacturerId" class="alert-danger"></span>
-                </div> *@
+                
 
                 @* <div class="form-group col-md-6">
                     @Html.LabelFor(model => model.MANUFACTURER_Data, new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="MANUFACTURER_Data" id="manufacturerCode" readonly />
                 </div> *@
 
-                <!-- 3) SỬA CHỖ NÀY: IngredientGroup -->
-                @* <div class="form-group col-md-6">
-                    @Html.LabelFor(model => model.IngredientGroupId, new { @class = "control-label col-md-4" })
-                    @Html.DropDownListFor(
-                        model => model.IngredientGroupId,
-                        (IEnumerable<SelectListItem>)ViewData["IngredientGroupLst"],
-                        "Choose IngredientGroup",
-                        new {
-                            @class = "form-control col-md-8 dynamic-dropdown-1",
-                            data_type = "IngredientGroup",
-                            data_target = "#INGREDIENTSGROP"
-                        }
-                    )
-                    <span asp-validation-for="IngredientGroupId" class="alert-danger"></span>
-                </div> *@
+                
 
                 @* <div class="form-group col-md-6">
                     @Html.LabelFor(model => model.INGREDIENTS_GROUP_Data, new { @class = "control-label col-md-4" })
@@ -221,7 +194,7 @@
                     @Html.DropDownListFor(
                         model => model.VenderId,
                         (IEnumerable<SelectListItem>)ViewData["VendorLst"],
-                        "Choose Vender",
+                        "Chọn nhà cung cấp",
                         new {
                             @class = "form-control col-md-8 dynamic-dropdown-2",
                             data_type = "Vendor",

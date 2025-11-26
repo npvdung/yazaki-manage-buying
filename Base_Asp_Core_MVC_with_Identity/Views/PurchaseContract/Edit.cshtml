@@ -164,7 +164,7 @@
                     @Html.LabelFor(model => model.VenderId, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.VenderId,
                         vendorList,                     // dùng biến đã an toàn
-                        "Choose Vender",
+                        "Chọn nhà cung cấp",
                         new {
                             @class = "form-control col-md-8 dynamic-dropdown",
                             data_type = "Manufacturer",
@@ -188,15 +188,15 @@
                     @Html.LabelFor(m => m.TotalAmount)
                     <input type="number" class="form-control" id="TotalAmount" asp-for="TotalAmount" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalDiscoutAmount)
                     <input type="number" class="form-control" id="TotalDiscoutAmount" asp-for="TotalDiscoutAmount" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTax)
                     <input type="number" class="form-control" id="TotalAmountIncludeTax" asp-for="TotalAmountIncludeTax" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
                     <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount" asp-for="TotalAmountIncludeTaxAndDiscount" step="0.01" />
                 </div>
@@ -218,7 +218,7 @@
                             @Html.LabelFor(m => m.PurchaseContractDetails[i].ProductId)
                             @Html.DropDownListFor(m => m.PurchaseContractDetails[i].ProductId,
                             productList,
-                            "Choose Product",
+                            "Chọn sản phẩm",
                             new { @class = "form-control" })
 
                         </div>
@@ -318,21 +318,21 @@
                                                               <div class="form-group">
                                 <label for="PurchaseContractDetails_${rowCount}__ProductId">Product</label>
                                 <select name="PurchaseContractDetails[${rowCount}].ProductId" class="form-control">
-                                    <option value="">Select Product</option>
+                                    <option value="">Chọn mặt hàng</option>
                                     ${document.getElementById('product-template').innerHTML} <!-- Lấy dữ liệu từ template -->
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="PurchaseContractDetails_${rowCount}__Quantity">Quantity</label>
-                                <input type="number" name="PurchaseContractDetails[${rowCount}].Quantity" class="form-control detail-input" placeholder="Enter Quantity" />
+                                <input type="number" name="PurchaseContractDetails[${rowCount}].Quantity" class="form-control detail-input" placeholder="Số lượng" />
                             </div>
                             <div class="form-group">
                                 <label for="PurchaseContractDetails_${rowCount}__Price">Price</label>
-                                <input type="number" name="PurchaseContractDetails[${rowCount}].Price" class="form-control detail-input" placeholder="Enter Price" />
+                                <input type="number" name="PurchaseContractDetails[${rowCount}].Price" class="form-control detail-input" placeholder="Giá" />
                             </div>
                             <div class="form-group">
-                                <label for="PurchaseContractDetails_${rowCount}__TotalAmount">Total Amount</label>
-                                <input type="number" name="PurchaseContractDetails[${rowCount}].TotalAmount" class="form-control" placeholder="Enter Total Amount" readonly />
+                                <label for="PurchaseContractDetails_${rowCount}__TotalAmount">Tổng tiền</label>
+                                <input type="number" name="PurchaseContractDetails[${rowCount}].TotalAmount" class="form-control" placeholder="Tổng tiền" readonly />
                             </div>
                             <div class="form-group">
                                 <button type="button" class="btn btn-danger btn-remove-detail">Remove</button>
@@ -412,7 +412,7 @@
         detailDropdowns.each(function () {
             const dropdown = $(this);
             dropdown.empty(); // Xóa nội dung dropdown
-            dropdown.append('<option value="">Select Product</option>'); // Thêm option mặc định
+            dropdown.append('<option value="">Chọn mặt hàng</option>'); // Thêm option mặc định
             dropdown.append($('#product-template').html()); // Copy từ product-template
         });
     }

@@ -15,37 +15,30 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "Đơn mua")]
         public string PurchaseOrderId { get; set; }
 
-        [Required]
         [Display(Name = "Dịch vụ giao hàng")]
         public string? ShipingMethod { get; set; }
 
-        [Required]
         [Display(Name = "Địa chỉ")]
         public string? Address { get; set; }
 
         [Display(Name = "Người giao")]
         public string? DelyveryPersonName { get; set; }
 
-        [Required]
         [Display(Name = "SĐT người giao")]
         public string? DelyveryPersonPhone { get; set; }
 
-        [Display(Name = "Ghi chú")]
+        [Display(Name = "Lí do trả hàng")]
         public string? Note { get; set; }
 
-        [Required]
         [Display(Name = "Người nhận")]
         public string? RecipientsName { get; set; }
 
-        [Required]
         [Display(Name = "SĐT người nhận")]
         public string? RecipientsPhone { get; set; }
 
-        [Required]
         [Display(Name = "Ngày giao/trả")]
         public DateTime? DateShip { get; set; }
-
-        [Required]
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Số tiền trả lại")]
         public decimal? AmountReturn { get; set; }
 

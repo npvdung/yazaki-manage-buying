@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Base_Asp_Core_MVC_with_Identity.Models
 {
@@ -24,11 +25,11 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [Display(Name = "Ngày thanh toán")]
         public DateTime? BillPaymentDate { get; set; }
 
-        [Required(ErrorMessage = "Tổng tiền là bắt buộc.")]
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Tổng tiền")]
         public decimal? TotalAmount { get; set; }
 
-        [Required(ErrorMessage = "Số tiền thanh toán là bắt buộc.")]
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Số tiền thanh toán")]
         public decimal? BillPaymentAmount { get; set; }
 

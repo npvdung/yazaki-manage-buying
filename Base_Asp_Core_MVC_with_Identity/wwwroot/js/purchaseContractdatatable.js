@@ -28,31 +28,31 @@
           if (type === "display" && data !== null) {
             Id = row.id;
           }
-          return `<a href="/PurchaseContract/Edit/${Id}" m-1">View | Edit</a>`;
+          return `<a href="/PurchaseContract/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
-      {
-        targets: 1,
-        width: "70px",
-        orderable: false,
-        render: function (data, type, row) {
-          var Id = "";
-          if (type === "display" && data !== null) {
-            Id = row.id;
-          }
-          var status = 0;
-          if (data !== null) {
-            status = row.status;
-          }
-          if (status === 0) {
-            return `<a onclick="if (confirm('Bạn có chắc chắn muốn duyệt hợp đồng này?')) { DeleteEmp('${Id}'); }">Wait</a>`;
-          } else if (status === 1 || status === 2) {
-            return `<a>Approved</a>`;
-          } else {
-            return `<a>Reject</a>`;
-          }
-        },
-      },
+      // {
+      //   targets: 1,
+      //   width: "70px",
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     var Id = "";
+      //     if (type === "display" && data !== null) {
+      //       Id = row.id;
+      //     }
+      //     var status = 0;
+      //     if (data !== null) {
+      //       status = row.status;
+      //     }
+      //     if (status === 0) {
+      //       return `<a onclick="if (confirm('Bạn có chắc chắn muốn duyệt hợp đồng này?')) { DeleteEmp('${Id}'); }">Chờ duyệt</a>`;
+      //     } else if (status === 1 || status === 2) {
+      //       return `<a>Đã duyệt</a>`;
+      //     } else {
+      //       return `<a>Từ chối</a>`;
+      //     }
+      //   },
+      // },
       {
         data: null,
         name: "STT1",
@@ -89,11 +89,11 @@
         orderable: false,
         render: function (data, type, row) {
           if (data === 0) {
-            return '<span class="badge badge-success">Process</span>';
+            return '<span class="badge badge-success">Chờ duyệt</span>';
           } else if (data === 1 || data === 2) {
-            return '<span class="badge badge-secondary">Done</span>';
+            return '<span class="badge badge-secondary">Đã duyệt</span>';
           } else {
-            return '<span class="badge badge-danger ">Cancel</span>';
+            return '<span class="badge badge-danger ">Huỷ</span>';
           }
         },
       },

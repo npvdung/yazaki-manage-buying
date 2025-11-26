@@ -26,17 +26,17 @@
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
-          //   var id = row.id;
-          return "&nbsp;";
-          //   return `
-          //                 <a href="/BillPayment/Print/${id}"
-          //                    class="btn btn-sm btn-outline-secondary">
-          //                     <i class="fa fa-print"></i> In
-          //                 </a>`;
+          var id = row.id;
+          //   return "&nbsp;";
+          return `
+                          <a href="/BillPayment/Print/${id}"
+                             class="btn btn-sm btn-outline-secondary">
+                              <i class="fa fa-print"></i> In
+                          </a>`;
         },
       },
 
-      // 2. Action View | Edit
+      // 2. Action Xem | Sửa
       {
         targets: 2,
         width: "80px",
@@ -46,7 +46,7 @@
           if (type === "display" && data !== null) {
             Id = row.id;
           }
-          return `<a href="/BillPayment/Edit/${Id}" m-1">View | Edit</a>`;
+          return `<a href="/BillPayment/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
 

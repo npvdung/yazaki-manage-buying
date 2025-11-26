@@ -171,7 +171,7 @@
                     @Html.LabelFor(model => model.VenderId, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.VenderId,
                         vendorList,
-                        "Choose Vendor",
+                        "Chọn nhà cung cấp",
                         new {
                             @class = "form-control col-md-8 dynamic-dropdown",
                             data_type = "Manufacturer",
@@ -187,7 +187,7 @@
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.Status,
                         statusList,                         // dùng biến đã ép kiểu
-                        "Choose Status",
+                        "Chọn trạng thái",
                         new { @id = "supplier", @class = "form-control col-md-4", @disabled = "disabled" })
                     <input type="hidden" name="Status" value="@Model.Status" />
 
@@ -198,17 +198,17 @@
                     <input type="number" class="form-control" id="TotalAmount"
                            asp-for="TotalAmount" readonly />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalDiscoutAmount)
                     <input type="number" class="form-control" id="TotalDiscoutAmount"
                            asp-for="TotalDiscoutAmount" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTax)
                     <input type="number" class="form-control" id="TotalAmountIncludeTax"
                            asp-for="TotalAmountIncludeTax" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
                     <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount"
                            asp-for="TotalAmountIncludeTaxAndDiscount" readonly />
@@ -219,7 +219,7 @@
 
         <!-- Detail Information -->
         <div class="form-section">
-            <div class="section-title">Chi tiết các mặt hàng</div>
+            <div class="section-title">Chi tiết các Sản phẩm</div>
             <div id="details-container">
                 <!-- Dynamic rows will be added here -->
             </div>
@@ -282,29 +282,29 @@
         newRow.classList.add('detail-row');
         newRow.innerHTML = `
                                                                <div class="form-group">
-                        <label for="PurchaseContractDetails_${rowCount}__ProductId">Product</label>
+                        <label for="PurchaseContractDetails_${rowCount}__ProductId">Sản phẩm</label>
                         <select name="PurchaseContractDetails[${rowCount}].ProductId" class="form-control">
-                            <option value="">Select Product</option>
+                            <option value="">Chọn Sản phẩm</option>
                             ${document.getElementById('product-template').innerHTML} <!-- Lấy dữ liệu từ template -->
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="PurchaseContractDetails_${rowCount}__Quantity">Quantity</label>
+                        <label for="PurchaseContractDetails_${rowCount}__Quantity">Số lượng</label>
                         <input type="number" name="PurchaseContractDetails[${rowCount}].Quantity"
-                               class="form-control detail-input" placeholder="Enter Quantity" />
+                               class="form-control detail-input" placeholder="Số lượng" />
                     </div>
                     <div class="form-group">
-                        <label for="PurchaseContractDetails_${rowCount}__Price">Price</label>
+                        <label for="PurchaseContractDetails_${rowCount}__Price">Đơn giá</label>
                         <input type="number" name="PurchaseContractDetails[${rowCount}].Price"
-                               class="form-control detail-input" placeholder="Enter Price" />
+                               class="form-control detail-input" placeholder="Giá" />
                     </div>
                     <div class="form-group">
-                        <label for="PurchaseContractDetails_${rowCount}__TotalAmount">Total Amount</label>
+                        <label for="PurchaseContractDetails_${rowCount}__TotalAmount">Thành tiền</label>
                         <input type="number" name="PurchaseContractDetails[${rowCount}].TotalAmount"
-                               class="form-control" placeholder="Enter Total Amount" readonly />
+                               class="form-control" placeholder="Thành tiền" readonly />
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-danger btn-remove-detail">Remove</button>
+                        <button type="button" class="btn btn-danger btn-remove-detail">Xoá</button>
                     </div>
                                                 `;
 
@@ -381,7 +381,7 @@
         detailDropdowns.each(function () {
             const dropdown = $(this);
             dropdown.empty(); // Xóa nội dung dropdown
-            dropdown.append('<option value="">Select Product</option>'); // Thêm option mặc định
+            dropdown.append('<option value="">Chọn Sản phẩm</option>'); // Thêm option mặc định
             dropdown.append($('#product-template').html()); // Copy từ product-template
         });
     }

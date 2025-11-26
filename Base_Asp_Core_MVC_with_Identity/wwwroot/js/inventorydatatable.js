@@ -29,7 +29,7 @@
           if (type === "display" && data !== null) {
             Id = row.id;
           }
-          return `<a href="/Inventory/Edit/${Id}" m-1">View | Edit</a>`;
+          return `<a href="/Inventory/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
 

@@ -148,7 +148,7 @@
                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
                 @Html.DropDownListFor(model => model.Status,
                 new SelectList(ViewBag.Statuslst, "Value", "Text", Model.Status), // Tham số thứ 4 là giá trị được chọn mặc định
-                "Choose Status",
+                "Chọn trạng thái",
                 new { @id = "supplier", @class = "form-control col-md-4" })
                 <span asp-validation-for="Status" class="alert-danger"></span>
             </div>

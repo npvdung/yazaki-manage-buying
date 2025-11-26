@@ -1,4 +1,8 @@
-﻿namespace Base_Asp_Core_MVC_with_Identity.Models.View
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Base_Asp_Core_MVC_with_Identity.Models.View
+
+
 {
     public class InvoiceViewModel
     {
@@ -10,6 +14,7 @@
         [Display(Name = "Ngày mua hàng")]
         public DateTime? InvoiceDate { get; set; }
         public int Quantity { get; set; }
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Tổng tiền")]
         public decimal TotalAmount { get; set; }
         public string UserId { get; set; }
@@ -30,6 +35,7 @@
         public int Unit { get; set; }
         [Display(Name = "SL")]
         public int Quantity { get; set; }
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Đơn giá")]
         public decimal Price { get; set; }
         [Display(Name = "Giá")]

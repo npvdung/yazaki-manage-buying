@@ -1,4 +1,6 @@
-﻿namespace Base_Asp_Core_MVC_with_Identity.Models.View
+﻿using System.ComponentModel.DataAnnotations.Schema;
+namespace Base_Asp_Core_MVC_with_Identity.Models.View
+
 {
     public class ReturnViewModel
     {
@@ -11,6 +13,7 @@
         public string UserId { get; set; }
         public string SupplierId { get; set; }
         public string Description { get; set; }
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Tổng tiền")]
 
         public decimal TotalAmount { get; set; }
@@ -29,6 +32,7 @@
         public DateTime? ReturnDate { get; set; }
         public int Unit { get; set; }
         public int Quantity { get; set; }
+        [Column(TypeName = "decimal(18,0)")]
         public decimal Price { get; set; }
     }
 }

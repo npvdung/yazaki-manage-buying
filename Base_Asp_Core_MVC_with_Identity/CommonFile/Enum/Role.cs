@@ -24,20 +24,27 @@
     }
     public enum ActiveStatus
     {
+        [Display(Name = "Hoạt động")]
         Active,
+        [Display(Name = "Ngừng hoạt động")]
         UnActive
     }
 
     public enum ApprodedStatus
     {
+        [Display(Name = "Đang chờ")]
         Process,
+        [Display(Name = "Đã duyệt")]
         Success,
+        [Display(Name = "Huỷ")]
         Cancel
     }
 
     public enum ActiveVenderStatus
     {
+        [Display(Name = "Đang hoạt động")]
         Active,
+        [Display(Name = "Ngừng hoạt động")]
         Off
     }
 
@@ -74,7 +81,9 @@
     }
     public enum EnumReceipt
     {
+        [Display(Name = "Đã nhận")]
         Success,
+        [Display(Name = "Thất bại")]
         Fail,
     }
 }

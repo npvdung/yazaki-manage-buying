@@ -164,7 +164,7 @@
                     @Html.LabelFor(model => model.PurchaseOrderId, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.PurchaseOrderId,
                     poList,
-                    "Choose PurchaseOrder",
+                    "Chọn đơn hàng",
                     new { @class = "form-control col-md-8 dynamic-dropdown", data_type = "Manufacturer", data_target = "#manufacturerCode" })
                 <span asp-validation-for="PurchaseOrderId" class="alert-danger"></span>
                 </div>
@@ -172,7 +172,7 @@
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.Status,
                     statusList,
-                    "Choose Status",
+                    "Chọn trạng thái",
                     new { @class = "form-control col-md-4" })
                 <span asp-validation-for="Status" class="alert-danger"></span>
                 </div>
@@ -200,7 +200,7 @@
         <div class="form-section">
             <div class="section-title">Chi tiết đơn hàng</div>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(model => model.ShipmentRequestType, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="ShipmentRequestType" id="manufacturerCode" />
                     <span asp-validation-for="ShipmentRequestType" class="alert-danger"></span>
@@ -210,12 +210,12 @@
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Method" id="manufacturerCode" />
                     <span asp-validation-for="Method" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Address" id="manufacturerCode" />
                     <span asp-validation-for="Address" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6 d-none">
+                <div class="form-group col-md-6">
                     @Html.LabelFor(model => model.DelyveryPersonName, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DelyveryPersonName" id="manufacturerCode" />
                     <span asp-validation-for="DelyveryPersonName" class="alert-danger"></span>
@@ -225,7 +225,7 @@
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DelyveryPersonPhone" id="manufacturerCode" />
                     <span asp-validation-for="DelyveryPersonPhone" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="text" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Note" id="manufacturerCode" />
                     <span asp-validation-for="Note" class="alert-danger"></span>
@@ -245,12 +245,12 @@
                     <input type="date" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DateShip" id="manufacturerCode" />
                     <span asp-validation-for="DateShip" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(model => model.DiscountAmout, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="int" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="DiscountAmout" id="manufacturerCode" />
                     <span asp-validation-for="DiscountAmout" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-4" })
                     <input type="int" class="form-control mb-3 col-md-8 dynamic-textbox" asp-for="Amount" id="manufacturerCode" />
                     <span asp-validation-for="Amount" class="alert-danger"></span>

@@ -155,7 +155,7 @@
                     @Html.LabelFor(model => model.ShipmentRequestId, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.ShipmentRequestId,
                     shipmentList,
-                    "Choose Shipment Code",
+                    "Chọn mã giao hàng",
                     new {
                         @class = "form-control col-md-8 dynamic-dropdown",
                         data_type = "Manufacturer",
@@ -168,7 +168,7 @@
                     @Html.LabelFor(model => model.StockId, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.StockId,
                     stockList,
-                    "Choose Inventory",
+                    "Chọn kho",
                     new { @class = "form-control col-md-8" })
 
                     <span asp-validation-for="StockId" class="alert-danger"></span>
@@ -177,7 +177,7 @@
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-4" })
                     @Html.DropDownListFor(model => model.Status,
                     statusList,
-                    "Choose Status",
+                    "Chọn trạng thái",
                     new { @class = "form-control col-md-4", id = "supplier" })
 
                     <span asp-validation-for="Status" class="alert-danger"></span>
@@ -186,15 +186,15 @@
                     @Html.LabelFor(m => m.TotalAmount)
                     <input type="number" class="form-control" id="TotalAmount" asp-for="TotalAmount" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalDiscoutAmount)
                     <input type="number" class="form-control" id="TotalDiscoutAmount" asp-for="TotalDiscoutAmount" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTax)
                     <input type="number" class="form-control" id="TotalAmountIncludeTax" asp-for="TotalAmountIncludeTax" step="0.01" />
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmountIncludeTaxAndDiscount)
                     <input type="number" class="form-control" id="TotalAmountIncludeTaxAndDiscount" asp-for="TotalAmountIncludeTaxAndDiscount" step="0.01" />
                 </div>

@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Base_Asp_Core_MVC_with_Identity.Models
 {
@@ -30,14 +31,14 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
 
         [Display(Name = "Thuế")]
         public decimal? TotalAmountIncludeTax { get; set; }
-
+        [Column(TypeName = "decimal(18,0)")]
         [Required]
         [Display(Name = "Tổng tiền")]
         public decimal? TotalAmount { get; set; }
 
         [Display(Name = "Chiết khấu")]
         public decimal? TotalDiscoutAmount { get; set; }
-
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Tổng tiền sau thuế & CK")]
         public decimal? TotalAmountIncludeTaxAndDiscount { get; set; }
 

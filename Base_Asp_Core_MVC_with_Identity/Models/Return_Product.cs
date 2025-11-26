@@ -1,4 +1,5 @@
-﻿namespace Base_Asp_Core_MVC_with_Identity.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+namespace Base_Asp_Core_MVC_with_Identity.Models
 {
     public class Return_Product
     {
@@ -20,7 +21,7 @@
 
         [Display(Name = "Mô tả")]
         public string Description { get; set; }
-
+        [Column(TypeName = "decimal(18,0)")]
         [Display(Name = "Tổng tiền")]
         public decimal TotalAmount { get; set; }
 

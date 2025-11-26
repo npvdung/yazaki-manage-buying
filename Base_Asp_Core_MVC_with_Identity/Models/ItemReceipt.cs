@@ -28,7 +28,7 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [NotMapped]
         [Display(Name = "Thuế")]
         public decimal? TotalAmountIncludeTax { get; set; }
-
+        [Column(TypeName = "decimal(18,0)")]
         [NotMapped]
         [Display(Name = "Tổng tiền")]
         public decimal? TotalAmount { get; set; }
@@ -36,7 +36,7 @@ namespace Base_Asp_Core_MVC_with_Identity.Models
         [NotMapped]
         [Display(Name = "Chiết khấu")]
         public decimal? TotalDiscoutAmount { get; set; }
-
+        [Column(TypeName = "decimal(18,0)")]
         [NotMapped]
         [Display(Name = "Tổng tiền sau thuế & CK")]
         public decimal? TotalAmountIncludeTaxAndDiscount { get; set; }

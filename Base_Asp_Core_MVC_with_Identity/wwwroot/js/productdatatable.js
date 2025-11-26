@@ -20,7 +20,7 @@
       // 0. Id (ẩn)
       { data: "id", name: "Id", autoWidth: true },
 
-      // 1. Action View | Edit
+      // 1. Action Xem | Sửa
       {
         width: "80px",
         orderable: false,
@@ -29,7 +29,7 @@
           if (type === "display" && data !== null) {
             Id = row.id;
           }
-          return `<a href="/Product/Edit/${Id}" m-1">View | Edit</a>`;
+          return `<a href="/Product/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
 

@@ -152,7 +152,7 @@
                     @Html.DropDownListFor(
                     model => model.ItemReceiptId,
                     (IEnumerable<SelectListItem>)ViewData["ItemReceiptIdLst"],
-                    "Choose Shipment Code",
+                    "Chọn mã giao hàng",
                     new {
                         @class = "form-control col-md-8 dynamic-dropdown",
                         data_type = "Manufacturer",
@@ -166,7 +166,7 @@
                     @Html.DropDownListFor(
                     model => model.Status,
                     new SelectList((IEnumerable<SelectListItem>)ViewData["StatusLst"], "Value", "Text", Model?.Status),
-                    "Choose Status",
+                    "Chọn trạng thái",
                     new {
                         @id = "supplier",
                         @class = "form-control col-md-4"
@@ -184,7 +184,7 @@
                     <input type="text" class="form-control mb-3 col-md-8" asp-for="PaymentTerm" placeholder="Nhập tên danh mục">
                     <span asp-validation-for="PaymentTerm" class="alert-danger"></span>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-6 d-none">
                     @Html.LabelFor(m => m.TotalAmount)
                     <input type="number" class="form-control" id="TotalAmountMaster" asp-for="TotalAmount" step="0.01" />
                 </div>
