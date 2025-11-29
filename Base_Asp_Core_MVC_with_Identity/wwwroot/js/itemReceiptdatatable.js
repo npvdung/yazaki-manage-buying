@@ -17,9 +17,12 @@
       },
     ],
     columns: [
+      // 0. Id (ẩn)
       { data: "id", name: "Id", autoWidth: true },
+
+      // 1. Xem | Sửa
       {
-        targets: 1,
+        data: null,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
@@ -30,8 +33,10 @@
           return `<a href="/ItemReceipt/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
+
+      // 2. Thanh toán
       {
-        targets: 1,
+        data: null,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
@@ -42,6 +47,8 @@
           return `<a href="/BillPayment/Payment/${Id}" m-1">Thanh toán</a>`;
         },
       },
+
+      // 3. STT
       {
         data: null,
         name: "STT",
@@ -54,8 +61,19 @@
         },
       },
 
+      // 4. Tên hàng (tên kho)
       { data: "inventoryName", name: "inventoryName", autoWidth: true },
+
+      // 5. Mã vận đơn
       { data: "shipCode", name: "shipCode", autoWidth: true },
+
+      // 6. Mã đơn hàng
+      { data: "orderCode", name: "orderCode", autoWidth: true },
+
+      // 7. Tên đơn hàng
+      { data: "orderName", name: "orderName", autoWidth: true },
+
+      // 8. Trạng thái
       {
         data: "status",
         name: "status",
@@ -79,6 +97,7 @@
     pageLength: 5,
   });
 });
+
 function DeleteEmp(id) {
   $.ajax({
     url: "/api/CategoryApi/DeleteEmp?id=" + id,
@@ -110,4 +129,5 @@ function DeleteEmp(id) {
     },
   });
 }
+
 function EditEmp(id) {}

@@ -10,78 +10,97 @@
     },
     columnDefs: [
       {
-        targets: [0],
+        targets: [0], // ẩn cột ID
         visible: false,
         searchable: false,
       },
     ],
     columns: [
-      { data: "id", name: "Id", autoWidth: true },
+      { data: "id", name: "id", autoWidth: true }, // hidden
+
       {
         data: null,
+        name: "stt",
         render: function (data, type, row, meta) {
           return meta.row + meta.settings._iDisplayStart + 1;
         },
       },
+      { data: "orderCode", name: "orderCode", autoWidth: true },
+
       { data: "productName", name: "productName", autoWidth: true },
       { data: "quantity", name: "quantity", autoWidth: true },
-      //   {
-      //     data: "taxAmount",
-      //     name: "taxAmount",
-      //     autoWidth: true,
-      //     render: function (data, type, row) {
-      //       // Định dạng Tiền Việt Nam Đồng
-      //       return new Intl.NumberFormat("vi-VN", {
-      //         style: "currency",
-      //         currency: "VND",
-      //       }).format(data);
-      //     },
-      //   },
+
       {
         data: "price",
         name: "price",
         autoWidth: true,
         render: function (data, type, row) {
-          // Định dạng Tiền Việt Nam Đồng
           return new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
-          }).format(data);
+          }).format(data || 0);
         },
       },
-      // {
-      //     "data": "discountAmount",
-      //     "name": "discountAmount",
-      //     "autoWidth": true,
-      //     "render": function (data, type, row) {
-      //         // Định dạng Tiền Việt Nam Đồng
-      //         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data);
-      //     }
-      // },
+
       {
         data: "totalAmount",
         name: "totalAmount",
         autoWidth: true,
         render: function (data, type, row) {
-          // Định dạng Tiền Việt Nam Đồng
           return new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
-          }).format(data);
+          }).format(data || 0);
         },
       },
+
+      // Ngày đặt hàng = DateShip
+      {
+        data: "orderDate",
+        name: "orderDate",
+        autoWidth: true,
+        render: function (data, type, row) {
+          if (!data) return "";
+          var date = new Date(data);
+          if (isNaN(date.getTime())) return "";
+          return date.toLocaleDateString("vi-VN");
+        },
+      },
+
+      // Ngày thanh toán
+      {
+        data: "paymentDate",
+        name: "paymentDate",
+        autoWidth: true,
+        render: function (data, type, row) {
+          if (!data) return "";
+          var date = new Date(data);
+          if (isNaN(date.getTime())) return "";
+          return date.toLocaleDateString("vi-VN");
+        },
+      },
+
+      // Nhà cung cấp
+      { data: "vendorName", name: "vendorName", autoWidth: true },
+
+      // Tiền tệ
+      { data: "currencyName", name: "currencyName", autoWidth: true },
     ],
+
     footerCallback: function (row, data, start, end, display) {
       var api = this.api();
 
+      // cột 5 (index bắt đầu từ 0) là "totalAmount"
       var total = api
-        .column(5, { page: "current" }) // CHỈ SỐ ĐÚNG
+        .column(6, { page: "current" })
         .data()
         .reduce(function (a, b) {
-          return parseFloat(a) + parseFloat(b || 0);
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
         }, 0);
 
-      $(api.column(5).footer()).html(
+      $(api.column(6).footer()).html(
         "Tổng: " + total.toLocaleString("vi-VN") + " VND"
       );
     },

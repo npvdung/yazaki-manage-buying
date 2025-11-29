@@ -15,7 +15,8 @@ namespace MangagerBuyProduct.Models.View
 
         public string? ShipmentCode { get; set; }
         public string? StockName    { get; set; }
-
+        public string? OrderCode { get; set; }   // Mã đơn hàng (ORDER_...)
+        public string? OrderName { get; set; }
         public string? VendorName    { get; set; }
         public string? VendorAddress { get; set; }
         public string? VendorPhone   { get; set; }

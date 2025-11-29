@@ -34,17 +34,29 @@ namespace MangagerBuyProduct.Controllers
 
                 var customerData =
                     from tempcustomer in _context.ItemReceipt
+                    // join shipment
                     join temp1 in _context.shipmentRequests
                         on tempcustomer.ShipmentRequestId equals temp1.ID.ToString() into tempTable
                     from leftJoinData in tempTable.DefaultIfEmpty()
+                    // join stock
                     join temp2 in _context.inventory
                         on tempcustomer.StockId equals temp2.ID.ToString() into tempTable2
                     from leftJoinData1 in tempTable2.DefaultIfEmpty()
+                    // join purchase order
+                    join po in _context.purchaseOrders
+                        on leftJoinData.PurchaseOrderId equals po.ID.ToString() into poTable
+                    from poData in poTable.DefaultIfEmpty()
+                    // join purchase contract (để lấy tên đơn hàng = tên hợp đồng)
+                    join contract in _context.purchaseContracts
+                        on poData.PurchaseContractId equals contract.ID.ToString() into contractTable
+                    from contractData in contractTable.DefaultIfEmpty()
                     select new
                     {
                         tempcustomer.ID,
                         inventoryName = leftJoinData1 != null ? leftJoinData1.Name : string.Empty,
                         shipCode      = leftJoinData  != null ? leftJoinData.ShipmentRequestCode : string.Empty,
+                        orderCode     = poData        != null ? poData.PurchaseOrderCode : string.Empty,
+                        orderName     = contractData  != null ? contractData.PurchaseContractName : string.Empty,
                         tempcustomer.Status
                     };
 
@@ -53,7 +65,9 @@ namespace MangagerBuyProduct.Controllers
                 {
                     customerData = customerData.Where(m =>
                         m.inventoryName.Contains(searchValue) ||
-                        m.shipCode.Contains(searchValue));
+                        m.shipCode.Contains(searchValue)      ||
+                        m.orderCode.Contains(searchValue)     ||
+                        m.orderName.Contains(searchValue));
                 }
 
                 // LUÔN sắp xếp mới → cũ theo mã vận đơn

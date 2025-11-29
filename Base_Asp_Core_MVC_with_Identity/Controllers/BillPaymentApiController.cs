@@ -1,4 +1,6 @@
-﻿using Base_Asp_Core_MVC_with_Identity.Data;
+﻿using Base_Asp_Core_MVC_with_Identity.CommonFile.Enum;
+using Base_Asp_Core_MVC_with_Identity.CommonMethod;
+using Base_Asp_Core_MVC_with_Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,7 +15,9 @@ namespace MangagerBuyProduct.Controllers
         private readonly Base_Asp_Core_MVC_with_IdentityContext _context;
         private readonly UserManager<UserSystemIdentity> _uid;
 
-        public BillPaymentApiController(Base_Asp_Core_MVC_with_IdentityContext context, UserManager<UserSystemIdentity> uid)
+        public BillPaymentApiController(
+            Base_Asp_Core_MVC_with_IdentityContext context,
+            UserManager<UserSystemIdentity> uid)
         {
             _uid = uid;
             _context = context;
@@ -32,28 +36,53 @@ namespace MangagerBuyProduct.Controllers
                 int skip     = !string.IsNullOrEmpty(start)  ? Convert.ToInt32(start)  : 0;
                 int recordsTotal = 0;
 
+                // BillPayment -> ItemReceipt -> ShipmentRequest -> PurchaseOrder -> PurchaseContract
                 var customerData =
-                    from tempcustomer in _context.BillPayment
-                    join temp1 in _context.ItemReceipt
-                        on tempcustomer.ItemReceiptId equals temp1.ID.ToString() into tempTable
-                    from leftJoinData in tempTable.DefaultIfEmpty()
+                    from bill in _context.BillPayment
+                    join ir in _context.ItemReceipt
+                        on bill.ItemReceiptId equals ir.ID.ToString() into irTable
+                    from ir in irTable.DefaultIfEmpty()
+
+                    join ship in _context.shipmentRequests
+                        on ir.ShipmentRequestId equals ship.ID.ToString() into shipTable
+                    from ship in shipTable.DefaultIfEmpty()
+
+                    join po in _context.purchaseOrders
+                        on ship.PurchaseOrderId equals po.ID.ToString() into poTable
+                    from po in poTable.DefaultIfEmpty()
+
+                    join contract in _context.purchaseContracts
+                        on po.PurchaseContractId equals contract.ID.ToString() into ctTable
+                    from contract in ctTable.DefaultIfEmpty()
+
                     select new
                     {
-                        tempcustomer.ID,
-                        tempcustomer.BillPaymentCode,
-                        tempcustomer.BillPaymentDate,
-                        totalAmount = tempcustomer.TotalAmount,
-                        tempcustomer.Status
+                        bill.ID,
+                        bill.BillPaymentCode,
+                        bill.BillPaymentDate,
+                        totalAmount = bill.TotalAmount,
+                        bill.Status,
+
+                        // Mã / tên đơn hàng để hiển thị
+                        OrderCode = po != null ? po.PurchaseOrderCode : string.Empty,
+                        OrderName = contract != null ? contract.PurchaseContractName : string.Empty,
+
+                        // Trạng thái dạng text
+                        StatusText = bill.Status.HasValue
+                            ? ((EnumReceipt)bill.Status.Value).GetDisplayName()
+                            : string.Empty
                     };
 
                 // filter theo search
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     customerData = customerData.Where(m =>
-                        m.BillPaymentCode.Contains(searchValue));
+                        m.BillPaymentCode.Contains(searchValue) ||
+                        m.OrderCode.Contains(searchValue) ||
+                        m.OrderName.Contains(searchValue));
                 }
 
-                // LUÔN sắp xếp mới → cũ theo ngày thanh toán
+                // Sắp xếp mới -> cũ theo ngày thanh toán
                 customerData = customerData
                     .OrderByDescending(m => m.BillPaymentDate);
 

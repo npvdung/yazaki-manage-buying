@@ -32,17 +32,24 @@ namespace MangagerBuyProduct.Controllers
                 int skip     = !string.IsNullOrEmpty(start)  ? Convert.ToInt32(start)  : 0;
                 int recordsTotal = 0;
 
+                // JOIN: ShipmentRequest -> PurchaseOrder -> PurchaseContract
                 var customerData =
                     from tempcustomer in _context.shipmentRequests
-                    join temp1 in _context.purchaseOrders
-                        on tempcustomer.PurchaseOrderId equals temp1.ID.ToString() into tempTable
-                    from leftJoinData in tempTable.DefaultIfEmpty()
+                    join poTmp in _context.purchaseOrders
+                        on tempcustomer.PurchaseOrderId equals poTmp.ID.ToString() into tempTable
+                    from po in tempTable.DefaultIfEmpty()
+                    join pcTmp in _context.purchaseContracts
+                        on po.PurchaseContractId equals pcTmp.ID.ToString() into tempTable2
+                    from pc in tempTable2.DefaultIfEmpty()
                     select new
                     {
                         tempcustomer.ID,
                         tempcustomer.ShipmentRequestCode,
                         tempcustomer.ShipmentRequestType,
-                        PurchaseOrderCode = leftJoinData != null ? leftJoinData.PurchaseOrderCode : string.Empty,
+                        // Mã đặt hàng (code của PurchaseOrder)
+                        PurchaseOrderCode = po != null ? po.PurchaseOrderCode : string.Empty,
+                        // Tên hợp đồng mua hàng (name của PurchaseContract)
+                        PurchaseContractName = pc != null ? pc.PurchaseContractName : string.Empty,
                         tempcustomer.Status
                     };
 
@@ -51,7 +58,8 @@ namespace MangagerBuyProduct.Controllers
                 {
                     customerData = customerData.Where(m =>
                         m.ShipmentRequestCode.Contains(searchValue) ||
-                        m.PurchaseOrderCode.Contains(searchValue));
+                        m.PurchaseOrderCode.Contains(searchValue) ||
+                        m.PurchaseContractName.Contains(searchValue));
                 }
 
                 // LUÔN sắp xếp mới → cũ theo mã SHIP_...

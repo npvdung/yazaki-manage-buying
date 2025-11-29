@@ -50,31 +50,7 @@
     <h3>@Model.BillPaymentCode</h3>
     <br />
 
-    <div>
-        <div class="section-title">Thông tin các bên</div>
-        <table>
-            <tr>
-                <td><strong>Bên A:</strong></td>
-                <td>@Model.CompanyAName</td>
-            </tr>
-            <tr>
-                <td><strong>Bên B:</strong></td>
-                <td>
-                    @Model.VendorName<br />
-                    @if (!string.IsNullOrEmpty(Model.VendorAddress))
-                    {
-                        <span>Địa chỉ: @Model.VendorAddress</span><br />
-                    }
-                    @if (!string.IsNullOrEmpty(Model.VendorPhone))
-                    {
-                        <span>Điện thoại: @Model.VendorPhone</span>
-                    }
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div>
+        <div>
         <div class="section-title">Thông tin hóa đơn</div>
         <table>
             <tr>
@@ -88,6 +64,13 @@
                 <td>@Model.ShipmentCode</td>
                 <td><strong>Kho:</strong></td>
                 <td>@Model.StockName</td>
+            </tr>
+            <!-- ⬇️ THÊM MỚI: Mã / Tên đơn hàng -->
+            <tr>
+                <td><strong>Mã đơn hàng:</strong></td>
+                <td>@Model.OrderCode</td>
+                <td><strong>Tên đơn hàng:</strong></td>
+                <td>@Model.OrderName</td>
             </tr>
             <tr>
                 <td><strong>Hình thức thanh toán:</strong></td>

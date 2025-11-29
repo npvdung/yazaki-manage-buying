@@ -20,33 +20,29 @@
       // 0. Id (ẩn)
       { data: "id", name: "Id", autoWidth: true },
 
-      // 1. Nút IN
+      // 1. Nút IN hóa đơn
       {
-        targets: 1,
+        data: null,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
           var id = row.id;
-          //   return "&nbsp;";
           return `
-                          <a href="/BillPayment/Print/${id}"
-                             class="btn btn-sm btn-outline-secondary">
-                              <i class="fa fa-print"></i> In
-                          </a>`;
+            <a href="/BillPayment/Print/${id}"
+               class="btn btn-sm btn-outline-secondary">
+                <i class="fa fa-print"></i> In
+            </a>`;
         },
       },
 
       // 2. Action Xem | Sửa
       {
-        targets: 2,
+        data: null,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
-          var Id = "";
-          if (type === "display" && data !== null) {
-            Id = row.id;
-          }
-          return `<a href="/BillPayment/Edit/${Id}" m-1">Xem | Sửa</a>`;
+          var id = row.id;
+          return `<a href="/BillPayment/Edit/${id}" m-1">Xem | Sửa</a>`;
         },
       },
 
@@ -72,7 +68,8 @@
         name: "billPaymentDate",
         autoWidth: true,
         render: function (data, type, row) {
-          let date = new Date(data);
+          if (!data) return "";
+          var date = new Date(data);
           return date.toLocaleDateString("vi-VN");
         },
       },
@@ -83,10 +80,47 @@
         name: "totalAmount",
         autoWidth: true,
         render: function (data, type, row) {
+          if (data == null) return "";
           return new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
           }).format(data);
+        },
+      },
+
+      // 7. Mã đơn hàng (tương ứng OrderCode trong API)
+      {
+        data: "orderCode",
+        name: "orderCode",
+        autoWidth: true,
+      },
+
+      // 8. Tên đơn hàng (OrderName trong API)
+      {
+        data: "orderName",
+        name: "orderName",
+        autoWidth: true,
+      },
+
+      // 9. Trạng thái (StatusText trong API) hiển thị dạng badge
+      {
+        data: "statusText",
+        name: "statusText",
+        autoWidth: true,
+        orderable: false,
+        render: function (data, type, row) {
+          if (!data) return "";
+
+          // tùy vào text mà gắn màu khác nhau
+          if (data === "Đã nhận") {
+            return (
+              '<span class="badge badge-success">' + "Đã thanh toán" + "</span>"
+            );
+          } else if (data === "Thất bại") {
+            return '<span class="badge badge-danger">' + data + "</span>";
+          } else {
+            return '<span class="badge badge-secondary">' + data + "</span>";
+          }
         },
       },
     ],
@@ -97,12 +131,12 @@
     pageLength: 5,
   });
 });
+
 function DeleteEmp(id) {
   $.ajax({
     url: "/api/CategoryApi/DeleteEmp?id=" + id,
     type: "DELETE",
     success: function (result) {
-      debugger;
       // Xử lý kết quả trả về từ server (nếu cần)
       location.reload();
     },
@@ -111,21 +145,20 @@ function DeleteEmp(id) {
       console.log(xhr.responseText);
     },
   });
+
   $.ajax({
     url: "/api/CategoryApi/SendMes",
     type: "POST",
     data: {
       // Dữ liệu gửi lên API Controller
-      // Dữ liệu của bạn
     },
     success: function (response) {
-      // Xử lý phản hồi từ API Controller
-      // Hiển thị thông báo thành công
-      alert(response); // Hoặc sử dụng một thư viện thông báo khác
+      alert(response);
     },
     error: function (xhr, status, error) {
       // Xử lý lỗi nếu cần
     },
   });
 }
+
 function EditEmp(id) {}

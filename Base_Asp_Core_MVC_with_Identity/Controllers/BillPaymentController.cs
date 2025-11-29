@@ -378,15 +378,15 @@ namespace MangagerBuyProduct.Controllers
                 return NotFound();
             }
 
-            // 2. Lấy chuỗi liên quan: ItemReceipt -> ShipmentRequest -> PurchaseOrder -> PurchaseContract -> Vendor
+            // 2. Chuỗi liên quan: ItemReceipt -> ShipmentRequest -> PurchaseOrder -> PurchaseContract -> Vendor -> Stock
             var itemReceipt = _context.ItemReceipt
                 .FirstOrDefault(x => x.ID.ToString() == bill.ItemReceiptId);
 
-            ShipmentRequest?   shipment      = null;
-            PurchaseOrder?     purchaseOrder = null;
-            PurchaseContract?  contract      = null;
-            Vendor?            vendor        = null;
-            Inventory?         stock         = null;
+            ShipmentRequest?  shipment      = null;
+            PurchaseOrder?    purchaseOrder = null;
+            PurchaseContract? contract      = null;
+            Vendor?           vendor        = null;
+            Inventory?        stock         = null;
 
             if (itemReceipt != null)
             {
@@ -438,6 +438,12 @@ namespace MangagerBuyProduct.Controllers
 
                 ShipmentCode      = shipment?.ShipmentRequestCode,
                 StockName         = stock?.Name,
+
+                // ⬇️ THÊM MỚI: mã / tên đơn hàng
+                // Mã đơn hàng: mã PurchaseOrder
+                OrderCode = purchaseOrder?.PurchaseOrderCode,
+                // Tên đơn hàng: dùng TÊN HỢP ĐỒNG MUA (sửa đúng tên property nếu khác)
+                OrderName = contract?.PurchaseContractName,
 
                 VendorName        = vendor?.VendorName,
                 VendorAddress     = vendor?.Address,

@@ -17,35 +17,42 @@
       },
     ],
     columns: [
+      // 0. ID (ẩn)
       { data: "id", name: "Id", autoWidth: true },
+
+      // 1. Xem | Sửa
       {
-        targets: 1,
+        data: null,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
           var Id = "";
-          if (type === "display" && data !== null) {
+          if (type === "display" && row && row.id) {
             Id = row.id;
           }
           return `<a href="/ShipmentRequest/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
+
+      // 2. Nhận hàng / Hoàn thành
       {
-        targets: 1,
+        data: null,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
           var Id = "";
-          if (type === "display" && data !== null) {
+          if (type === "display" && row && row.id) {
             Id = row.id;
           }
-          if (row.status == "ProcessShip") {
+          if (row.status === "ProcessShip") {
             return `<a href="/ItemReceipt/ItemReceipt/${Id}" m-1">Nhận hàng</a>`;
           } else {
             return `<a m-1">Hoàn thành</a>`;
           }
         },
       },
+
+      // 3. STT
       {
         data: null,
         name: "STT1",
@@ -58,22 +65,29 @@
         },
       },
 
+      // 4. Mã vận đơn
       {
         data: "shipmentRequestCode",
         name: "shipmentRequestCode",
         autoWidth: true,
       },
-      {
-        data: "shipmentRequestType",
-        name: "shipmentRequestType",
-        autoWidth: true,
-      },
+
+      // 5. Mã đặt hàng (PurchaseOrderCode)
       {
         data: "purchaseOrderCode",
         name: "purchaseOrderCode",
         autoWidth: true,
         orderable: false,
       },
+
+      // 6. Tên hợp đồng mua hàng (PurchaseContractName)
+      {
+        data: "purchaseContractName",
+        name: "purchaseContractName",
+        autoWidth: true,
+      },
+
+      // 7. Trạng thái
       {
         data: "status",
         name: "status",
@@ -89,31 +103,6 @@
           }
         },
       },
-      //{
-      //    "targets": 1,
-      //    "width": "50px",
-      //    "orderable": false,
-      //    "render": function (data, type, row) {
-      //        var Id = '';
-      //        if (type === 'display' && data !== null) {
-      //            Id = row.id;
-      //        }
-      //        return `<a href="/Category/Edit/${Id}" class="btn btn-primary center-block m-1">Sửa</a>`;
-      //    }
-      //},
-
-      //{
-      //    "targets": 1,
-      //    "width": "70px",
-      //    "orderable": false,
-      //    "render": function (data, type, row) {
-      //        var Id = '';
-      //        if (type === 'display' && data !== null) {
-      //            Id = row.id;
-      //        }
-      //        return `<button type="button" class="btn btn-danger center-block m-1" title="Xóa thông tin này" onclick="if (confirm('Bạn có chắc chắn muốn xóa nhân viên này?')) { DeleteEmp('${Id}'); }">Xoá</button>`;
-      //    }
-      //},
     ],
     lengthMenu: [
       [5, 10, 20, 50, 100],
@@ -122,6 +111,7 @@
     pageLength: 5,
   });
 });
+
 function DeleteEmp(id) {
   $.ajax({
     url: "/api/CategoryApi/DeleteEmp?id=" + id,
@@ -153,4 +143,5 @@ function DeleteEmp(id) {
     },
   });
 }
+
 function EditEmp(id) {}
