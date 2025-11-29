@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="node_modules/antd/dist/antd.css">
 <link href="~/css/datatable.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
 @if (TempData["ResultOk"] != null)
 {
     <div id="alert-div" class="alert alert-success position-fixed top-0 end-0 border border-success rounded-pill py-2 px-3" style="max-width: 450px;">
@@ -18,7 +19,6 @@
         }, 3000);
     </script>
 }
-
 
 <div class="container">
     <div class="row align-items-center mb-4">
@@ -38,19 +38,23 @@
         <table id="customerDatatable" class="ant-table custom-table" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
+                    <th></th> <!-- id ẩn -->
+                    <th></th> <!-- link Xem | Sửa -->
                     <th>STT</th>
                     <th>Mã trả hàng</th>
                     <th>Mã đặt hàng</th>
+                    <th>Tên đơn hàng</th>
+                    <th>Ngày trả</th>
+                    <th>Lý do</th>
                     <th>Tiền trả lại</th>
                 </tr>
             </thead>
         </table>
     </div>
 </div>
+
 @section Scripts
-    {
+{
     <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
     <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/js/returnAuthorizationdatatable.js"></script>

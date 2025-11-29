@@ -17,19 +17,24 @@
       },
     ],
     columns: [
-      { data: "id", name: "Id", autoWidth: true },
+      // 0: ID (ẩn)
+      { data: "id", name: "ID", autoWidth: true },
+
+      // 1: Link xem / sửa
       {
         targets: 1,
         width: "80px",
         orderable: false,
         render: function (data, type, row) {
           var Id = "";
-          if (type === "display" && data !== null) {
+          if (type === "display" && row && row.id) {
             Id = row.id;
           }
           return `<a href="/ReturnAuthorization/Edit/${Id}" m-1">Xem | Sửa</a>`;
         },
       },
+
+      // 2: STT
       {
         data: null,
         name: "STT",
@@ -42,18 +47,47 @@
         },
       },
 
+      // 3: Mã trả hàng
       {
         data: "returnAuthorizationCode",
-        name: "returnAuthorizationCode",
+        name: "ReturnAuthorizationCode",
         autoWidth: true,
       },
+
+      // 4: Mã đặt hàng
       { data: "nameOrder", name: "nameOrder", autoWidth: true },
+
+      // 5: Tên đơn hàng
+      { data: "orderName", name: "orderName", autoWidth: true },
+
+      // 6: Ngày trả
+      {
+        data: "dateShip",
+        name: "dateShip",
+        autoWidth: true,
+        render: function (data, type, row) {
+          if (!data) return "";
+          // Chuẩn hóa sang định dạng ngày tiếng Việt
+          var d = new Date(data);
+          if (isNaN(d)) return data;
+          return d.toLocaleDateString("vi-VN");
+        },
+      },
+
+      // 7: Lý do
+      {
+        data: "description",
+        name: "description",
+        autoWidth: true,
+      },
+
+      // 8: Tiền trả lại
       {
         data: "amountReturn",
         name: "amountReturn",
         autoWidth: true,
         render: function (data, type, row) {
-          // Định dạng Tiền Việt Nam Đồng
+          if (data === null || data === undefined) return "";
           return new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
@@ -68,35 +102,28 @@
     pageLength: 5,
   });
 });
+
 function DeleteEmp(id) {
   $.ajax({
     url: "/api/CategoryApi/DeleteEmp?id=" + id,
     type: "DELETE",
     success: function (result) {
-      debugger;
-      // Xử lý kết quả trả về từ server (nếu cần)
       location.reload();
     },
     error: function (xhr, status, error) {
-      // Xử lý lỗi (nếu có)
       console.log(xhr.responseText);
     },
   });
+
   $.ajax({
     url: "/api/CategoryApi/SendMes",
     type: "POST",
-    data: {
-      // Dữ liệu gửi lên API Controller
-      // Dữ liệu của bạn
-    },
+    data: {},
     success: function (response) {
-      // Xử lý phản hồi từ API Controller
-      // Hiển thị thông báo thành công
-      alert(response); // Hoặc sử dụng một thư viện thông báo khác
+      alert(response);
     },
-    error: function (xhr, status, error) {
-      // Xử lý lỗi nếu cần
-    },
+    error: function (xhr, status, error) {},
   });
 }
+
 function EditEmp(id) {}

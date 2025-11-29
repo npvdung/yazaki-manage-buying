@@ -624,18 +624,20 @@ ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ||
                                              ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")">
                 <a href="#"><i class="fas fa-cubes"></i> Danh sách <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
-                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
-                        asp-area="" asp-controller="Category" asp-action="Index">Loại vật tư</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Inventory" ? "active" : "")"
-                       asp-area="" asp-controller="Inventory" asp-action="Index">Kho</a>
+                        asp-area="" asp-controller="Inventory" asp-action="Index">Kho</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Currency" ? "active" : "")"
                        asp-area="" asp-controller="Currency" asp-action="Index">Loại tiền tệ</a>
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vendor" ? "active" : "")"
                        asp-area="" asp-controller="Vendor" asp-action="Index">Nhà cung cấp</a>
+                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")"
+                        asp-area="" asp-controller="Category" asp-action="Index">Loại vật tư</a>
+                    
+                    
                     @* <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Manufacture" ? "active" : "")"
                        asp-area="" asp-controller="Manufacture" asp-action="Index">Nhà sản xuất</a> *@
                     <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")"
-                       asp-area="" asp-controller="Product" asp-action="Index">Mặt hàng</a>
+                       asp-area="" asp-controller="Product" asp-action="Index">Hàng hoá</a>
                     @* <a class="nav-link text-dark @(ViewContext.RouteData.Values["controller"]?.ToString() == "IngredientsGroup" ? "active" : "")"
                        asp-area="" asp-controller="IngredientsGroup" asp-action="Index"> Thành phần</a> *@
                     <!-- Add similar conditions for other links -->
